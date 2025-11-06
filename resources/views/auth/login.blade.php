@@ -1,3 +1,4 @@
+
 {{-- resources/views/auth/login.blade.php --}}
 <!doctype html>
 <html lang="id">
