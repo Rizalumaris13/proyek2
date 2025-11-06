@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SiswaController;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -13,6 +14,14 @@ Route::get('/dashboard', function () {
 
 Route::get('/presensi', function () {
     return view('presensi-siswa');
+});
+
+Route::get('/data-siswa', function () {
+    return view('data-siswa');
+});
+
+Route::get('/tambah', function () {
+    return view('siswa.tambah-siswa');
 });
 
 
@@ -28,3 +37,7 @@ Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 });
+
+Route::get('/data-siswa', [SiswaController::class, 'index'])->name('siswa.index');
+Route::get('/siswa/tambah', [SiswaController::class, 'create'])->name('siswa.create');
+Route::post('/siswa/store', [SiswaController::class, 'store'])->name('siswa.store');

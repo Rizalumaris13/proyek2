@@ -123,7 +123,7 @@
         <nav class="nav flex-column">
           <a class="nav-link active" href="#">Dashboard</a>
           <a class="nav-link" href="/presensi">Presensi Siswa</a>
-          <a class="nav-link" href="#">Data Siswa</a>
+          <a class="nav-link" href="/data-siswa">Data Siswa</a>
           <a class="nav-link" href="#">Statistik Kehadiran</a>
           <a class="nav-link" href="#">Profile</a>
         </nav>
