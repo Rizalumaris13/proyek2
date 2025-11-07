@@ -125,7 +125,7 @@
           <a class="nav-link" href="/presensi">Presensi Siswa</a>
           <a class="nav-link" href="/data-siswa">Data Siswa</a>
           <a class="nav-link" href="#">Statistik Kehadiran</a>
-          <a class="nav-link" href="#">Profile</a>
+          <a class="nav-link" href="/profil">Profile</a>
         </nav>
       </div>
     </aside>

@@ -24,6 +24,10 @@ Route::get('/tambah', function () {
     return view('siswa.tambah-siswa');
 });
 
+Route::get('/profil', function () {
+    return view('profil');
+});
+
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
