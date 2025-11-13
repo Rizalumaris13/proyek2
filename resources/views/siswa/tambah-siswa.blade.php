@@ -106,14 +106,20 @@
                 <h5 class="fw-bold mb-3">Tambah Siswa Baru</h5>
                 <form method="POST" action="{{ route('siswa.store') }}">
                     @csrf
+
+                    {{-- Nama Siswa --}}
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama Siswa</label>
                         <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama siswa" required>
                     </div>
+
+                    {{-- NISN --}}
                     <div class="mb-3">
                         <label for="nisn" class="form-label">Nomor NISN</label>
                         <input type="text" class="form-control" id="nisn" name="nisn" placeholder="Masukkan NISN" required>
                     </div>
+
+                    {{-- Jenis Kelamin --}}
                     <div class="mb-3">
                         <label for="jk" class="form-label">Jenis Kelamin</label>
                         <select class="form-select" id="jk" name="jenis_kelamin" required>
@@ -123,6 +129,20 @@
                         </select>
                     </div>
 
+                   <div class="mb-4">
+    <label for="kelas" class="form-label">Kelas</label>
+    <select class="form-select" id="kelas" name="kelas" required>
+        <option value="">-- Pilih Kelas --</option>
+        <option value="X TKJ">X TKJ</option>
+        <option value="X Akutansi">X Akutansi</option>
+        <option value="XI TKJ">XI TKJ</option>
+        <option value="XI Akutansi">XI Akutansi</option>
+        <option value="XII TKJ">XII TKJ</option>
+        <option value="XII Akutansi">XII Akutansi</option>
+    </select>
+</div>
+
+                    {{-- Tombol --}}
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ url('/data-siswa') }}" class="btn btn-outline-secondary">Batal</a>

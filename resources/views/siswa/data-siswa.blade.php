@@ -153,15 +153,19 @@
         <main>
             <div class="panel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="fw-bold mb-0">Data Siswa</h6>
-                    <div>
-                        <select class="form-select form-select-sm" style="width:auto;display:inline-block">
-                            <option selected>Kelas XII A</option>
-                            <option>Kelas XII B</option>
-                            <option>Kelas XI A</option>
-                        </select>
-                    </div>
-                </div>
+    <h6 class="fw-bold mb-0">Data Siswa</h6>
+    <form method="GET" action="{{ route('siswa.index') }}">
+        <select name="kelas" class="form-select form-select-sm" style="width:auto;display:inline-block" onchange="this.form.submit()">
+            <option value="">Semua Kelas</option>
+            @foreach ($kelasList as $kelas)
+                <option value="{{ $kelas }}" {{ $filterKelas == $kelas ? 'selected' : '' }}>
+                    {{ $kelas }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+</div>
+
                 <div class="table-responsive">
                     <table class="table align-middle">
                         <thead>

@@ -7,39 +7,46 @@ use App\Models\Siswa;
 
 class SiswaController extends Controller
 {
-     public function index()
+    // Tampilkan daftar siswa (dengan optional filter kelas)
+    public function index(Request $request)
     {
-        // Ambil semua data dari tabel siswa
-        $dataSiswa = Siswa::orderBy('nama', 'asc')->get();
+        $filterKelas = $request->input('kelas');
+        $kelasList = Siswa::select('kelas')->distinct()->pluck('kelas');
 
-        // Kirim ke view
-        return view('siswa.data-siswa', compact('dataSiswa'));
+        $dataSiswa = Siswa::when($filterKelas, function($q, $kelas){
+            return $q->where('kelas', $kelas);
+        })->orderBy('nama','asc')->get();
+
+        return view('siswa.data-siswa', compact('dataSiswa','kelasList','filterKelas'));
     }
-    
-    // Tampilkan halaman tambah siswa
+
+    // Tampilkan form tambah siswa
     public function create()
     {
-        return view('siswa.tambah-siswa');
+        // Jika kamu menggunakan daftar kelas statis, bisa kirim array
+        $kelas = ['X TKJ','X Akutansi','XI TKJ','XI Akutansi','XII Akutansi','XII TKJ']; // atau ambil dari tabel kelas jika ada
+        return view('siswa.tambah-siswa', compact('kelas'));
     }
 
-    // Simpan data siswa ke database
+    // Simpan data siswa baru
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'nama' => 'required|string|max:255',
             'nisn' => 'required|string|max:50|unique:siswa,nisn',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'kelas' => 'required|string|max:100',
         ]);
 
-        // Simpan ke database
         Siswa::create([
             'nama' => $request->nama,
             'nisn' => $request->nisn,
             'jenis_kelamin' => $request->jenis_kelamin,
+            'kelas' => $request->kelas,
         ]);
 
-        // Arahkan kembali ke halaman data siswa
-        return redirect('/data-siswa')->with('success', 'Data siswa berhasil ditambahkan!');
+        return redirect()->route('siswa.index')->with('success','Data siswa berhasil ditambahkan!');
     }
+
+    // (opsional) edit, update, destroy dsb...
 }

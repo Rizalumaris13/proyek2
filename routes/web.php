@@ -45,3 +45,4 @@ Route::middleware('auth')->group(function () {
 Route::get('/data-siswa', [SiswaController::class, 'index'])->name('siswa.index');
 Route::get('/siswa/tambah', [SiswaController::class, 'create'])->name('siswa.create');
 Route::post('/siswa/store', [SiswaController::class, 'store'])->name('siswa.store');
+Route::resource('siswa', SiswaController::class);
