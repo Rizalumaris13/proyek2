@@ -180,14 +180,19 @@
                         </thead>
                       <tbody>
                         @forelse ($dataSiswa as $index => $siswa)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $siswa->nama }}</td>
-                                <td>{{ $siswa->nisn }}</td>
-                                <td>{{ $siswa->jenis_kelamin }}</td>
-                                <td>X</td>
-                                <td><button class="btn-edit">✏️</button></td>
-                            </tr>
+                           <tr>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ $siswa->nama }}</td>
+    <td>{{ $siswa->nisn }}</td>
+    <td>{{ $siswa->jenis_kelamin }}</td>
+    <td>X</td>
+    <td>
+        <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
+            ✏️ Edit
+        </a>
+    </td>
+</tr>
+
                         @empty
                             <tr>
                                  <td colspan="6" class="text-center text-muted">Belum ada data siswa</td>

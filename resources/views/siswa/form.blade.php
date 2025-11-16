@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tambah Siswa — Sistem Presensi Cerdas</title>
+    <title>{{ isset($siswa) ? 'Edit Siswa' : 'Tambah Siswa' }} — Sistem Presensi Cerdas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -103,20 +103,30 @@
         {{-- Content --}}
         <main>
             <div class="panel">
-                <h5 class="fw-bold mb-3">Tambah Siswa Baru</h5>
-                <form method="POST" action="{{ route('siswa.store') }}">
+                <h5 class="fw-bold mb-3">
+                    {{ isset($siswa) ? 'Edit Data Siswa' : 'Tambah Siswa Baru' }}
+                </h5>
+
+                <form method="POST" action="{{ isset($siswa) ? route('siswa.update', $siswa->id) : route('siswa.store') }}">
                     @csrf
+                    @if(isset($siswa))
+                        @method('PUT')
+                    @endif
 
                     {{-- Nama Siswa --}}
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama Siswa</label>
-                        <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama siswa" required>
+                        <input type="text" class="form-control" id="nama" name="nama"
+                            value="{{ old('nama', $siswa->nama ?? '') }}"
+                            placeholder="Masukkan nama siswa" required>
                     </div>
 
                     {{-- NISN --}}
                     <div class="mb-3">
                         <label for="nisn" class="form-label">Nomor NISN</label>
-                        <input type="text" class="form-control" id="nisn" name="nisn" placeholder="Masukkan NISN" required>
+                        <input type="text" class="form-control" id="nisn" name="nisn"
+                            value="{{ old('nisn', $siswa->nisn ?? '') }}"
+                            placeholder="Masukkan NISN" required>
                     </div>
 
                     {{-- Jenis Kelamin --}}
@@ -124,33 +134,35 @@
                         <label for="jk" class="form-label">Jenis Kelamin</label>
                         <select class="form-select" id="jk" name="jenis_kelamin" required>
                             <option value="">-- Pilih Jenis Kelamin --</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
+                            <option value="Laki-laki" {{ old('jenis_kelamin', $siswa->jenis_kelamin ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="Perempuan" {{ old('jenis_kelamin', $siswa->jenis_kelamin ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                         </select>
                     </div>
 
-                   <div class="mb-4">
-    <label for="kelas" class="form-label">Kelas</label>
-    <select class="form-select" id="kelas" name="kelas" required>
-        <option value="">-- Pilih Kelas --</option>
-        <option value="X TKJ">X TKJ</option>
-        <option value="X Akutansi">X Akutansi</option>
-        <option value="XI TKJ">XI TKJ</option>
-        <option value="XI Akutansi">XI Akutansi</option>
-        <option value="XII TKJ">XII TKJ</option>
-        <option value="XII Akutansi">XII Akutansi</option>
-    </select>
-</div>
+                    {{-- Kelas --}}
+                    <div class="mb-4">
+                        <label for="kelas" class="form-label">Kelas</label>
+                        <select class="form-select" id="kelas" name="kelas" required>
+                            <option value="">-- Pilih Kelas --</option>
+                            @php
+                                $daftarKelas = ['X TKJ', 'X Akutansi', 'XI TKJ', 'XI Akutansi', 'XII TKJ', 'XII Akutansi'];
+                            @endphp
+                            @foreach($daftarKelas as $k)
+                                <option value="{{ $k }}" {{ old('kelas', $siswa->kelas ?? '') == $k ? 'selected' : '' }}>{{ $k }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     {{-- Tombol --}}
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{{ url('/data-siswa') }}" class="btn btn-outline-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary">
+                            {{ isset($siswa) ? 'Perbarui' : 'Simpan' }}
+                        </button>
+                        <a href="{{ url('/siswa') }}" class="btn btn-outline-secondary">Batal</a>
                     </div>
                 </form>
             </div>
         </main>
     </div>
 </body>
-
 </html>
