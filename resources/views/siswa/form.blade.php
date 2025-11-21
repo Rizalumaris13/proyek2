@@ -139,18 +139,20 @@
                         </select>
                     </div>
 
-                    {{-- Kelas --}}
-                    <div class="mb-4">
-                        <label for="kelas" class="form-label">Kelas</label>
-                        <select class="form-select" id="kelas" name="kelas" required>
-                            <option value="">-- Pilih Kelas --</option>
-                            @php
-                                $daftarKelas = ['X TKJ', 'X Akutansi', 'XI TKJ', 'XI Akutansi', 'XII TKJ', 'XII Akutansi'];
-                            @endphp
-                            @foreach($daftarKelas as $k)
-                                <option value="{{ $k }}" {{ old('kelas', $siswa->kelas ?? '') == $k ? 'selected' : '' }}>{{ $k }}</option>
-                            @endforeach
-                        </select>
+                   {{-- Kelas --}}
+<div class="mb-4">
+    <label for="kelas" class="form-label">Kelas</label>
+    <select name="kelas_id" class="form-select">
+
+        @foreach ($kelasList as $kelas)
+            <option value="{{ $kelas->id }}"
+                {{ (isset($siswa) && $siswa->kelas_id == $kelas->id) ? 'selected' : '' }}>
+                {{ $kelas->nama_kelas }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
                     </div>
 
                     {{-- Tombol --}}

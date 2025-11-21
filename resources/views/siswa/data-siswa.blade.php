@@ -142,7 +142,7 @@
                 <nav class="nav flex-column">
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link" href="/presensi">Presensi Siswa</a>
-                    <a class="nav-link active" href="/data-siswa">Data Siswa</a>
+                    <a class="nav-link active" href="/siswa">Data Siswa</a>
                     <a class="nav-link" href="#">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
@@ -155,15 +155,20 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
     <h6 class="fw-bold mb-0">Data Siswa</h6>
     <form method="GET" action="{{ route('siswa.index') }}">
-        <select name="kelas" class="form-select form-select-sm" style="width:auto;display:inline-block" onchange="this.form.submit()">
-            <option value="">Semua Kelas</option>
-            @foreach ($kelasList as $kelas)
-                <option value="{{ $kelas }}" {{ $filterKelas == $kelas ? 'selected' : '' }}>
-                    {{ $kelas }}
-                </option>
-            @endforeach
-        </select>
-    </form>
+    <select name="kelas_id" class="form-select form-select-sm" 
+            style="width:auto; display:inline-block" onchange="this.form.submit()">
+
+        <option value="">Semua Kelas</option>
+
+        @foreach ($kelasList as $kelas)
+            <option value="{{ $kelas->id }}"
+                {{ $filterKelas == $kelas->id ? 'selected' : '' }}>
+                {{ $kelas->nama_kelas}}
+            </option>
+        @endforeach
+
+    </select>
+</form>
 </div>
 
                 <div class="table-responsive">

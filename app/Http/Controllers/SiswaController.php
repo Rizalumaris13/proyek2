@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Models\Kelas;
 
 class SiswaController extends Controller
 {
@@ -11,50 +12,32 @@ class SiswaController extends Controller
      * Tampilkan daftar siswa + filter kelas
      */
     public function index(Request $request)
-    {
-        $filterKelas = $request->input('kelas');
+{
+    $kelasList = Kelas::all();
 
-        // Ambil seluruh kelas unik
-        $kelasList = Siswa::select('kelas')->distinct()->pluck('kelas')->toArray();
+    $filterKelas = $request->kelas_id;
 
-        // Urutkan kelas: X → XI → XII, lalu jurusan
-        usort($kelasList, function($a, $b) {
+    $query = Siswa::with('kelas');
 
-            preg_match('/\b(X|XI|XII)\b/', $a, $matchA);
-            preg_match('/\b(X|XI|XII)\b/', $b, $matchB);
-
-            if (!$matchA || !$matchB) {
-                return strcmp($a, $b);
-            }
-
-            $order = ['X' => 1, 'XI' => 2, 'XII' => 3];
-
-            if ($order[$matchA[1]] !== $order[$matchB[1]]) {
-                return $order[$matchA[1]] <=> $order[$matchB[1]];
-            }
-
-            return strcmp($a, $b);
-        });
-
-        // Ambil siswa sesuai filter kelas
-        $dataSiswa = Siswa::when($filterKelas, function($q, $kelas){
-                return $q->where('kelas', $kelas);
-            })
-            ->orderBy('nama', 'asc')
-            ->get();
-
-        return view('siswa.data-siswa', compact('dataSiswa', 'kelasList', 'filterKelas'));
+    if ($filterKelas) {
+        $query->where('kelas_id', $filterKelas);
     }
+
+    $dataSiswa = $query->paginate(10)->appends($request->query());
+
+    return view('siswa.data-siswa', compact('kelasList', 'dataSiswa', 'filterKelas'));
+}
+
 
     /**
      * Form tambah siswa
      */
     public function create()
     {
-        // buat variabel $siswa null agar tidak error saat include form
-        $siswa = null;
-        return view('siswa.form', compact('siswa'));
+        $kelasList = Kelas::all();
+        return view('siswa.form', compact('kelasList'));
     }
+
 
     /**
      * Simpan data siswa baru
@@ -62,21 +45,22 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nisn' => 'required|string|max:50|unique:siswa,nisn',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'kelas' => 'required|string|max:100',
+            'nama' => 'required',
+            'nisn' => 'required|unique:siswa',
+            'jenis_kelamin' => 'required',
+            'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         Siswa::create([
             'nama' => $request->nama,
             'nisn' => $request->nisn,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'kelas' => $request->kelas,
+            'kelas_id' => $request->kelas_id,
         ]);
 
-        return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil ditambahkan!');
+        return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambah');
     }
+
 
     /**
      * Form edit siswa
@@ -84,8 +68,11 @@ class SiswaController extends Controller
     public function edit($id)
     {
         $siswa = Siswa::findOrFail($id);
-        return view('siswa.form', compact('siswa'));
+        $kelasList = Kelas::all();
+
+        return view('siswa.form', compact('siswa', 'kelasList'));
     }
+
 
     /**
      * Update data siswa
@@ -98,17 +85,16 @@ class SiswaController extends Controller
             'nama' => 'required|string|max:255',
             'nisn' => 'required|string|max:50|unique:siswa,nisn,' . $siswa->id,
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'kelas' => 'required|string|max:100',
+            'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         $siswa->update([
             'nama' => $request->nama,
             'nisn' => $request->nisn,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'kelas' => $request->kelas,
+            'kelas_id' => $request->kelas_id,   // FIX terpenting!
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diperbarui!');
     }
-
 }

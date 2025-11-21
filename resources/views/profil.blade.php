@@ -109,7 +109,7 @@
             <div class="sidebar-card">
                 <a href="/dashboard">Dashboard</a>
                 <a href="/presensi">Presensi Siswa</a>
-                <a href="/data-siswa">Data Siswa</a>
+                <a href="/siswa">Data Siswa</a>
                 <a href="#">Statistik Kehadiran</a>
                 <a class="active" href="/profil">Profil</a>
             </div>
