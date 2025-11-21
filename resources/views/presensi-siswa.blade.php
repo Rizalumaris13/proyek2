@@ -107,7 +107,7 @@
                 <nav class="nav flex-column">
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link active" href="/presensi">Presensi Siswa</a>
-                    <a class="nav-link" href="/data-siswa">Data Siswa</a>
+                    <a class="nav-link" href="/siswa">Data Siswa</a>
                     <a class="nav-link" href="#">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
@@ -135,6 +135,7 @@
                     Siswa: 35 | Kelas: XII IPA 1
                     <div class="mt-3 d-flex gap-2">
                         <button class="btn btn-primary btn-sm">Generate Face Recognition</button>
+                        <a href="/kehadiran/manual" class="btn btn-secondary">Presensi Manual</a>
                         <button class="btn btn-outline-secondary btn-sm">Validasi</button>
                     </div>
                 </div>

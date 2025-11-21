@@ -142,7 +142,7 @@
                 <nav class="nav flex-column">
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link" href="/presensi">Presensi Siswa</a>
-                    <a class="nav-link active" href="/data-siswa">Data Siswa</a>
+                    <a class="nav-link active" href="/siswa">Data Siswa</a>
                     <a class="nav-link" href="#">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
@@ -153,15 +153,24 @@
         <main>
             <div class="panel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="fw-bold mb-0">Data Siswa</h6>
-                    <div>
-                        <select class="form-select form-select-sm" style="width:auto;display:inline-block">
-                            <option selected>Kelas XII A</option>
-                            <option>Kelas XII B</option>
-                            <option>Kelas XI A</option>
-                        </select>
-                    </div>
-                </div>
+    <h6 class="fw-bold mb-0">Data Siswa</h6>
+    <form method="GET" action="{{ route('siswa.index') }}">
+    <select name="kelas_id" class="form-select form-select-sm" 
+            style="width:auto; display:inline-block" onchange="this.form.submit()">
+
+        <option value="">Semua Kelas</option>
+
+        @foreach ($kelasList as $kelas)
+            <option value="{{ $kelas->id }}"
+                {{ $filterKelas == $kelas->id ? 'selected' : '' }}>
+                {{ $kelas->nama_kelas}}
+            </option>
+        @endforeach
+
+    </select>
+</form>
+</div>
+
                 <div class="table-responsive">
                     <table class="table align-middle">
                         <thead>
@@ -176,14 +185,19 @@
                         </thead>
                       <tbody>
                         @forelse ($dataSiswa as $index => $siswa)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $siswa->nama }}</td>
-                                <td>{{ $siswa->nisn }}</td>
-                                <td>{{ $siswa->jenis_kelamin }}</td>
-                                <td>X</td>
-                                <td><button class="btn-edit">✏️</button></td>
-                            </tr>
+                           <tr>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ $siswa->nama }}</td>
+    <td>{{ $siswa->nisn }}</td>
+    <td>{{ $siswa->jenis_kelamin }}</td>
+    <td>X</td>
+    <td>
+        <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
+            ✏️ Edit
+        </a>
+    </td>
+</tr>
+
                         @empty
                             <tr>
                                  <td colspan="6" class="text-center text-muted">Belum ada data siswa</td>
