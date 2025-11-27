@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/kehadiran/manual', [KehadiranController::class, 'index'])->name('kehadiran.index');
+    Route::get('/kehadiran/statistik', [KehadiranController::class, 'statistik'])->name('kehadiran.statistik');
     Route::post('/kehadiran/store', [KehadiranController::class, 'store'])->name('kehadiran.store');
 });
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');

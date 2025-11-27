@@ -17,7 +17,7 @@ class SiswaController extends Controller
 
     $filterKelas = $request->kelas_id;
 
-    $query = Siswa::with('kelas');
+    $query = Siswa::with('kelas')->orderBy('nama', 'asc');
 
     if ($filterKelas) {
         $query->where('kelas_id', $filterKelas);

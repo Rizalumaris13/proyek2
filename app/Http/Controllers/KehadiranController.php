@@ -12,13 +12,17 @@ use App\Models\Guru;
 class KehadiranController extends Controller
 {
     public function index()
-    {
-        $kelas = Kelas::first();
-        $siswa = Siswa::all();
+{
+    $kelas = Kelas::first();
+    $siswa = Siswa::orderBy('nama', 'asc')->get();
+    
+    // Ambil kehadiran hari ini
+    $kehadiranHariIni = Kehadiran::where('tanggal', now()->toDateString())
+        ->get()
+        ->keyBy('siswa_id');
 
-        return view('kehadiran.manual', compact('kelas', 'siswa'));
-    }
-
+    return view('kehadiran.manual', compact('kelas', 'siswa', 'kehadiranHariIni'));
+}
     public function store(Request $request)
 {
     // 1. Ambil array kehadiran dari form:
@@ -53,5 +57,42 @@ class KehadiranController extends Controller
     return redirect()->route('kehadiran.index')
         ->with('success', 'Data kehadiran berhasil disimpan!');
 }
+public function statistik(Request $request)
+{
+    // Ambil daftar kelas untuk dropdown
+    $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
 
+    // Cek apakah data kelas tersedia
+    if ($kelasList->isEmpty()) {
+        return back()->with('error', 'Belum ada data kelas.');
+    }
+
+    // Tentukan kelas yang dipilih
+    $kelasId = $request->kelas_id ?? $kelasList->first()->id;
+
+    // Ambil siswa berdasarkan kelas
+    $siswa = Siswa::where('kelas_id', $kelasId)
+        ->orderBy('nama', 'asc')
+        ->get();
+
+    // Ambil rekap kehadiran berdasarkan bulan
+    $rekap = Kehadiran::selectRaw("
+            MONTH(tanggal) as bulan,
+            SUM(CASE WHEN status = 'hadir' THEN 1 ELSE 0 END) AS hadir,
+            SUM(CASE WHEN status = 'izin'  THEN 1 ELSE 0 END) AS izin,
+            SUM(CASE WHEN status = 'sakit' THEN 1 ELSE 0 END) AS sakit,
+            SUM(CASE WHEN status = 'alfa'  THEN 1 ELSE 0 END) AS alfa
+        ")
+        ->whereIn('siswa_id', $siswa->pluck('id'))
+        ->groupBy('bulan')
+        ->get()
+        ->keyBy('bulan');
+
+    return view('kehadiran.statistik', compact(
+        'kelasList',
+        'kelasId',
+        'rekap',
+        'siswa'
+    ));
+}
 }

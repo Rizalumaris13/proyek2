@@ -108,7 +108,7 @@
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link active" href="/presensi">Presensi Siswa</a>
                     <a class="nav-link" href="/siswa">Data Siswa</a>
-                    <a class="nav-link" href="#">Statistik Kehadiran</a>
+                    <a class="nav-link" href="/kehadiran/statistik">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
             </div>
@@ -132,7 +132,7 @@
                 <div class="p-3 rounded" style="background:#f8f9fb;border:1px solid #eee;">
                     <strong>Ilmu Pengetahuan Alam</strong><br>
                     08:00 - 10:00 WIB | Pertemuan ke-1<br>
-                    Siswa: 35 | Kelas: XII IPA 1
+                    Siswa: 35 | Kelas: X
                     <div class="mt-3 d-flex gap-2">
                         <button class="btn btn-primary btn-sm">Generate Face Recognition</button>
                         <a href="/kehadiran/manual" class="btn btn-secondary">Presensi Manual</a>

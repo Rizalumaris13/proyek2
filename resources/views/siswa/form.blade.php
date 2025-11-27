@@ -94,7 +94,7 @@
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link" href="/presensi">Presensi Siswa</a>
                     <a class="nav-link active" href="/siswa">Data Siswa</a>
-                    <a class="nav-link" href="#">Statistik Kehadiran</a>
+                    <a class="nav-link" href="/kehadiran/statistik">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
             </div>
@@ -150,11 +150,8 @@
                 {{ $kelas->nama_kelas }}
             </option>
         @endforeach
-
     </select>
 </div>
-                    </div>
-
                     {{-- Tombol --}}
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
