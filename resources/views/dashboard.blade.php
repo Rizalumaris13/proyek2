@@ -44,6 +44,7 @@
 
     /* Layout */
     .app{display:grid;grid-template-columns:260px 1fr;gap:28px;padding:28px;align-items:start}
+
     /* Sidebar card */
     .sidebar-card{
       background:var(--panel);
@@ -56,9 +57,7 @@
     .sidebar .nav-link.active{background:linear-gradient(90deg,var(--accent),#2f63d6);color:#fff}
 
     /* content area */
-    .content{
-      min-height:70vh;
-    }
+    .content{min-height:70vh;}
 
     /* quick action cards */
     .quick-cards{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px}
@@ -85,14 +84,6 @@
     /* footer */
     footer{padding:14px 28px;text-align:center;color:var(--muted);font-size:13px;background:transparent}
 
-    /* responsive */
-    @media (max-width:980px){
-      .app{grid-template-columns:1fr;padding:18px}
-      .quick-card{width:48%}
-    }
-    @media (max-width:560px){
-      .quick-card{width:100%}
-    }
   </style>
 </head>
 <body>
@@ -100,7 +91,6 @@
   {{-- Topbar --}}
   <header class="topbar">
     <div class="brand">
-      {{-- ubah path logo jika perlu --}}
       <img src="{{ asset('images/logo.png') }}" alt="logo">
       <div>
         <h5>Sistem Presensi Cerdas</h5>
@@ -109,19 +99,28 @@
     </div>
 
     <div class="d-flex align-items-center gap-3">
-      <div style="color:rgba(255,255,255,0.9);font-weight:600">Halo, {{ Auth::user()->name ?? 'Admin' }}</div>
-      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">Logout</a>
-      <form id="logout-form" action="{{Route ('logout')}}" method="POST" style="display:none">@csrf</form>
+      <div style="color:rgba(255,255,255,0.9);font-weight:600">
+        Halo, {{ Auth::user()->name ?? 'Admin' }}
+      </div>
+
+      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
+        Logout
+      </a>
+
+      <form id="logout-form" action="{{ Route('logout') }}" method="POST" style="display:none">
+        @csrf
+      </form>
     </div>
   </header>
 
   {{-- Main app grid --}}
   <div class="app container-fluid">
+    
     {{-- Sidebar --}}
     <aside class="sidebar">
       <div class="sidebar-card">
         <nav class="nav flex-column">
-          <a class="nav-link active" href="#">Dashboard</a>
+          <a class="nav-link active" href="/dashboard">Dashboard</a>
           <a class="nav-link" href="/presensi">Presensi Siswa</a>
           <a class="nav-link" href="/siswa">Data Siswa</a>
           <a class="nav-link" href="/kehadiran/statistik">Statistik Kehadiran</a>
@@ -134,30 +133,33 @@
     <main class="content">
       <h5 style="margin-bottom:18px;font-weight:700;color:#22314f">Aksi Cepat</h5>
 
-      {{-- Quick action cards --}}
+      {{-- Quick Cards --}}
       <div class="quick-cards">
         <div class="quick-card">
           <div class="icon">👥</div>
-          <h6>{{ $totalStudents ?? 120 }}</h6>
+          <h6>{{ $totalStudents }}</h6>
           <p>Total Siswa</p>
         </div>
 
         <div class="quick-card">
           <div class="icon">📋</div>
-          <h6>{{ $todayPresent ?? 18 }}</h6>
+          <h6>{{ $todayPresent }}</h6>
           <p>Hadir Hari Ini</p>
         </div>
 
         <div class="quick-card">
           <div class="icon">⏱️</div>
-          <h6>{{ $recentActivity ?? 5 }}</h6>
+          <h6>{{ $recentActivity }}</h6>
           <p>Aktivitas Terbaru</p>
         </div>
       </div>
 
-      {{-- Chart panel --}}
+      {{-- Chart --}}
       <section class="chart-panel">
-        <h6 style="font-weight:700;margin-bottom:12px;color:#22314f">Grafik Total Kehadiran Siswa</h6>
+        <h6 style="font-weight:700;margin-bottom:12px;color:#22314f">
+          Grafik Total Kehadiran Siswa
+        </h6>
+
         <div style="background:#fff;padding:18px;border-radius:12px">
           <canvas id="attendanceChart" height="220"></canvas>
         </div>
@@ -171,66 +173,46 @@
   </footer>
 
   <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // contoh data — gantikan dengan data nyata dari controller jika perlu
-    const labels = ['Januari','Februari','Maret','April','Mei','Juni'];
-    const hadir = [7, 13, 14, 11, 10, 12];        // contoh hadir
-    const sakit = [10, 5, 6, 6, 8, 9];           // contoh sakit/tidak hadir
-    const izin = [6, 14, 13, 14, 17, 11];        // contoh izin/total lainnya
-
-    const ctx = document.getElementById('attendanceChart').getContext('2d');
-    const attendanceChart = new Chart(ctx, {
+    const ctx = document.getElementById('attendanceChart');
+    new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels: @json($months),
         datasets: [
-          {
-            label: 'Hadir',
-            data: hadir,
-            backgroundColor: 'rgba(63,123,255,0.9)'
-          },
-          {
-            label: 'Sakit',
-            data: sakit,
-            backgroundColor: 'rgba(255,159,64,0.85)'
-          },
-          {
-            label: 'Izin',
-            data: izin,
-            backgroundColor: 'rgba(142,142,142,0.85)'
-          }
-        ]
+  {
+    label:'Hadir',
+    data:@json($hadir),
+    backgroundColor:'rgba(63,123,255,0.9)'
+  },
+  {
+    label:'Sakit',
+    data:@json($sakit),
+    backgroundColor:'rgba(255,159,64,0.85)'
+  },
+  {
+    label:'Izin',
+    data:@json($izin),
+    backgroundColor:'rgba(142,142,142,0.85)'
+  },
+  {
+    label:'Alfa',
+    data:@json($alfa),
+    backgroundColor:'rgba(255,80,80,0.85)' // warna merah
+  }
+]
+
       },
       options: {
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { color: '#556677' }
-          },
-          y: {
-            beginAtZero: true,
-            ticks: { color: '#556677' },
-            grid: { color: 'rgba(0,0,0,0.05)' }
-          }
-        },
-        plugins: {
-          legend: {
-            labels: { color: '#334455', boxWidth:12, boxHeight:8 }
-          },
-          tooltip: {
-            backgroundColor: '#0b2a55',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-          }
+        maintainAspectRatio:false,
+        scales:{
+          y:{ beginAtZero:true }
         }
       }
     });
   </script>
 
-  <!-- Bootstrap bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

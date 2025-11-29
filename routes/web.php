@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KehadiranController;
-
+use App\Http\Controllers\KehadiranStatistikController;
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
@@ -17,8 +17,6 @@ Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
-
     // Presensi & Profil
     Route::view('/presensi', 'presensi-siswa')->name('presensi');
     Route::view('/profil', 'profil')->name('profil');
@@ -27,10 +25,19 @@ Route::middleware('auth')->group(function () {
     Route::resource('siswa', SiswaController::class);
 });
 Route::middleware(['auth'])->group(function () {
-    Route::get('/kehadiran/manual', [KehadiranController::class, 'index'])->name('kehadiran.index');
-    Route::get('/kehadiran/statistik', [KehadiranController::class, 'statistik'])->name('kehadiran.statistik');
-    Route::post('/kehadiran/store', [KehadiranController::class, 'store'])->name('kehadiran.store');
+
+    // Presensi Manual
+    Route::get('/kehadiran/manual', [KehadiranController::class, 'index'])
+        ->name('kehadiran.index');
+
+    Route::post('/kehadiran/store', [KehadiranController::class, 'store'])
+        ->name('kehadiran.store');
+
+    // Statistik Kehadiran
+    Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index'])
+        ->name('kehadiran.statistik');
 });
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
