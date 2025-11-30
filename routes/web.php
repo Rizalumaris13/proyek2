@@ -6,6 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\KehadiranStatistikController;
+use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\GuruController;
+
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
@@ -18,7 +21,7 @@ Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
 
     // Presensi & Profil
-    Route::view('/presensi', 'presensi-siswa')->name('presensi');
+    Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi.index');
     Route::view('/profil', 'profil')->name('profil');
 
    

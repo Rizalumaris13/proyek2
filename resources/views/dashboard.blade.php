@@ -188,14 +188,14 @@
     backgroundColor:'rgba(63,123,255,0.9)'
   },
   {
-    label:'Sakit',
-    data:@json($sakit),
-    backgroundColor:'rgba(255,159,64,0.85)'
-  },
-  {
     label:'Izin',
     data:@json($izin),
-    backgroundColor:'rgba(142,142,142,0.85)'
+    backgroundColor:'rgba(246,194,62,0.85)' // warna kuning
+  },
+  {
+    label:'Sakit',
+    data:@json($sakit),
+    backgroundColor:'rgba(28,200,138,0.85)' // warna hijau
   },
   {
     label:'Alfa',

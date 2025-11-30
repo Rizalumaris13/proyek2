@@ -10,17 +10,45 @@ use App\Models\Guru;
 
 class KehadiranController extends Controller
 {
-    public function index()
-    {
-        $kelas = Kelas::first();
-        $siswa = Siswa::orderBy('nama', 'asc')->get();
+    public function index(Request $request)
+{
+    $guru = Guru::where('user_id', auth()->id())->first();
 
-        $kehadiranHariIni = Kehadiran::where('tanggal', now()->toDateString())
-            ->get()
-            ->keyBy('siswa_id');
-
-        return view('kehadiran.manual', compact('kelas', 'siswa', 'kehadiranHariIni'));
+    if (!$guru) {
+        return back()->with('error', 'Data guru tidak ditemukan.');
     }
+
+    // guru->kelas berasal dari relasi many-to-many
+    $kelasGuru = $guru->kelas;
+
+    // ambil kelas yang sedang dipilih
+    $kelasDipilih = $request->kelas_id 
+                        ? $kelasGuru->firstWhere('id', $request->kelas_id)
+                        : $kelasGuru->first();   // default kelas pertama
+
+    if (!$kelasDipilih) {
+        return back()->with('error', 'Guru tidak memiliki kelas yang diampu.');
+    }
+
+    // siswa per kelas
+    $siswa = Siswa::where('kelas_id', $kelasDipilih->id)
+                  ->orderBy('nama', 'asc')
+                  ->get();
+
+    // kehadiran hari ini per siswa
+    $kehadiranHariIni = Kehadiran::where('tanggal', now()->toDateString())
+        ->whereIn('siswa_id', $siswa->pluck('id'))
+        ->get()
+        ->keyBy('siswa_id');
+
+    return view('kehadiran.manual', [
+        'kelas' => $kelasDipilih,
+        'kelasGuru' => $kelasGuru,
+        'siswa' => $siswa,
+        'kehadiranHariIni' => $kehadiranHariIni
+    ]);
+}
+
 
     public function store(Request $request)
     {
