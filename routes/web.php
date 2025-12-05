@@ -30,6 +30,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kehadiran/manual', [KehadiranController::class, 'index'])->name('kehadiran.index');
     Route::post('/kehadiran/store', [KehadiranController::class, 'store'])->name('kehadiran.store');
 });
-Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
-Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
-Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
+
