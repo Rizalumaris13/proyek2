@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -7,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Kehadiran;
 
-class AttendanceStatisticController extends Controllers
+class AttendanceStatisticController extends Controller
 {
     public function index(Request $request)
     {
