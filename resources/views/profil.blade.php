@@ -110,7 +110,7 @@
                 <a href="/dashboard">Dashboard</a>
                 <a href="/presensi">Presensi Siswa</a>
                 <a href="/siswa">Data Siswa</a>
-                <a href="#">Statistik Kehadiran</a>
+                <a href="/kehadiran/statistik">Statistik Kehadiran</a>
                 <a class="active" href="/profil">Profil</a>
             </div>
         </div>
@@ -128,19 +128,19 @@
                     <form>
                         <div class="mb-3">
                             <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" value="Guru Aida" disabled>
+                            <input type="text" class="form-control" value="Rizal Umaris" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">E-mail</label>
-                            <input type="email" class="form-control" value="aida.guru@smanu.sch.id" disabled>
+                            <input type="email" class="form-control" value="RizalUmaris@smanu.sch.id" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
-                            <input type="text" class="form-control" value="Guru/Admin" disabled>
+                            <input type="text" class="form-control" value="Guru" disabled>
                         </div>
                         <div class="mb-4">
                             <label class="form-label">Tanggal bergabung</label>
-                            <input type="text" class="form-control" value="15 Januari 2023" disabled>
+                            <input type="text" class="form-control" value="15 November 2025" disabled>
                         </div>
                         <button type="button" class="btn btn-success px-3 rounded-pill">Edit</button>
                     </form>

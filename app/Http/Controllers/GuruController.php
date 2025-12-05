@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 
 class GuruController extends Controller
 {
-    // Halaman daftar guru
     public function index()
-    {
-        return view('guru.index');
-    }
+{
+    $guru = auth()->user()->guru;
+    $kelas = $guru->kelas()->withCount('siswa')->get();
+
+    return view('presensi.index', compact('guru','kelas'));
+}
+
     public function create()
 {
     return view('guru.create');

@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
+
 <!doctype html>
 <html lang="id">
 
@@ -112,7 +116,7 @@
 
         <div class="d-flex align-items-center gap-3">
             <div class="fw-semibold text-white-50">
-                Halo, {{ Auth::user()->name }}
+                Halo, {{ auth()->user()->name }}
             </div>
             <a href="#"
                 onclick="event.preventDefault();document.getElementById('logout-form').submit();"
@@ -131,7 +135,7 @@
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                     <a class="nav-link active" href="/presensi">Presensi Siswa</a>
                     <a class="nav-link" href="/siswa">Data Siswa</a>
-                    <a class="nav-link" href="#">Statistik Kehadiran</a>
+                    <a class="nav-link" href="/kehadiran/statistik">Statistik Kehadiran</a>
                     <a class="nav-link" href="/profil">Profil</a>
                 </nav>
             </div>
@@ -142,7 +146,7 @@
 
             {{-- Header Panel --}}
             <div class="panel mb-4">
-                <h5 class="fw-bold">Kehadiran Manual</h5>
+                <h5 class="fw-bold">Absensi Manual</h5>
                 <div class="text-muted">{{ now()->translatedFormat('l, d F Y') }}</div>
                 <div class="mt-2 fw-semibold">
                     Kelas: <span class="text-primary">{{ $kelas->nama_kelas ?? '-' }}</span>

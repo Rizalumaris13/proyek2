@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Siswa;
 use App\Models\Kehadiran;
 use App\Models\Kelas;
@@ -11,47 +10,69 @@ use App\Models\Guru;
 
 class KehadiranController extends Controller
 {
-    public function index()
-    {
-        $kelas = Kelas::first();
-        $siswa = Siswa::all();
-
-        return view('kehadiran.manual', compact('kelas', 'siswa'));
-    }
-
-    public function store(Request $request)
+    public function index(Request $request)
 {
-    // 1. Ambil array kehadiran dari form:
-    //    contoh: ['1' => 'hadir', '2' => 'izin', ...]
-    $kehadiranInput = $request->kehadiran;
-
-    // 2. Ambil guru berdasarkan user login
     $guru = Guru::where('user_id', auth()->id())->first();
 
-    // Jika guru tidak ditemukan (opsional)
     if (!$guru) {
-        return redirect()->back()->with('error', 'Data guru tidak ditemukan.');
+        return back()->with('error', 'Data guru tidak ditemukan.');
     }
 
-    // 3. Loop setiap siswa yang dikirim dari form
-    foreach ($kehadiranInput as $siswa_id => $status) {
+    // guru->kelas berasal dari relasi many-to-many
+    $kelasGuru = $guru->kelas;
 
-        // Validasi status biar aman
-        if (!in_array($status, ['hadir', 'izin', 'sakit', 'alfa'])) {
-            continue; // abaikan jika status tidak valid
-        }
+    // ambil kelas yang sedang dipilih
+    $kelasDipilih = $request->kelas_id 
+                        ? $kelasGuru->firstWhere('id', $request->kelas_id)
+                        : $kelasGuru->first();   // default kelas pertama
 
-        // 4. Simpan data kehadiran
-        Kehadiran::create([
-            'siswa_id' => $siswa_id,                    // ← benar!
-            'tanggal'  => now()->toDateString(),        // atau $request->tanggal
-            'status'   => $status,                      // ← benar!
-            'guru_id'  => $guru->id,                    // ambil dari guru yang login
-        ]);
+    if (!$kelasDipilih) {
+        return back()->with('error', 'Guru tidak memiliki kelas yang diampu.');
     }
 
-    return redirect()->route('kehadiran.index')
-        ->with('success', 'Data kehadiran berhasil disimpan!');
+    // siswa per kelas
+    $siswa = Siswa::where('kelas_id', $kelasDipilih->id)
+                  ->orderBy('nama', 'asc')
+                  ->get();
+
+    // kehadiran hari ini per siswa
+    $kehadiranHariIni = Kehadiran::where('tanggal', now()->toDateString())
+        ->whereIn('siswa_id', $siswa->pluck('id'))
+        ->get()
+        ->keyBy('siswa_id');
+
+    return view('kehadiran.manual', [
+        'kelas' => $kelasDipilih,
+        'kelasGuru' => $kelasGuru,
+        'siswa' => $siswa,
+        'kehadiranHariIni' => $kehadiranHariIni
+    ]);
 }
 
+
+    public function store(Request $request)
+    {
+        $kehadiranInput = $request->kehadiran;
+        $guru = Guru::where('user_id', auth()->id())->first();
+
+        if (!$guru) {
+            return back()->with('error', 'Data guru tidak ditemukan.');
+        }
+
+        foreach ($kehadiranInput as $siswa_id => $status) {
+
+            if (!in_array($status, ['hadir', 'izin', 'sakit', 'alfa'])) {
+                continue;
+            }
+
+            Kehadiran::create([
+                'siswa_id' => $siswa_id,
+                'tanggal'  => now()->toDateString(),
+                'status'   => $status,
+                'guru_id'  => $guru->id,
+            ]);
+        }
+
+        return redirect()->route('kehadiran.index')->with('success', 'Data kehadiran berhasil disimpan!');
+    }
 }
