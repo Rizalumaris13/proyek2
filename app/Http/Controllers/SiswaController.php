@@ -28,10 +28,6 @@ class SiswaController extends Controller
     return view('siswa.data-siswa', compact('kelasList', 'dataSiswa', 'filterKelas'));
 }
 
-
-    /**
-     * Form tambah siswa
-     */
     public function create()
     {
         $kelasList = Kelas::all();
@@ -39,9 +35,6 @@ class SiswaController extends Controller
     }
 
 
-    /**
-     * Simpan data siswa baru
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -74,9 +67,6 @@ class SiswaController extends Controller
     }
 
 
-    /**
-     * Update data siswa
-     */
     public function update(Request $request, $id)
     {
         $siswa = Siswa::findOrFail($id);

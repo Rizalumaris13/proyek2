@@ -65,6 +65,23 @@
             border-radius: 14px;
             box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
         }
+        .textarea-beauty {
+    resize: vertical;
+    border-radius: 12px;
+    border: 1.5px solid #d0d7e2;
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: all 0.25s ease;
+    background: #fdfdfd;
+}
+
+.textarea-beauty:focus {
+    border-color: #3f7bff;
+    box-shadow: 0 0 0 4px rgba(63, 123, 255, 0.15);
+    background: white;
+}
+
     </style>
 </head>
 
@@ -152,6 +169,18 @@
         @endforeach
     </select>
 </div>
+                    {{-- Alamat --}}
+<div class="mb-3">
+    <label for="alamat" class="form-label">Alamat</label>
+    <textarea 
+        id="alamat" 
+        name="alamat" 
+        class="form-control textarea-beauty" 
+        rows="3"
+        placeholder="Masukkan alamat lengkap siswa..."
+        required>{{ old('alamat', $siswa->alamat ?? '') }}</textarea>
+</div>
+
                     {{-- Tombol --}}
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
@@ -163,5 +192,14 @@
             </div>
         </main>
     </div>
+    <script>
+document.addEventListener('input', function (e) {
+    if (e.target.matches('.textarea-beauty')) {
+        e.target.style.height = 'auto';
+        e.target.style.height = (e.target.scrollHeight) + 'px';
+    }
+});
+</script>
+
 </body>
 </html>

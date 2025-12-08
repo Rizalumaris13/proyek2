@@ -11,11 +11,9 @@ class PresensiController extends Controller
 {
     public function index()
     {
-        // guru login
         $guru = auth()->user()->guru;
 
-        // ambil kelas yang dia ampu
-        $kelas = $guru->kelas; // ← INI YANG PENTING
+        $kelas = $guru->kelas; 
 
         return view('presensi-siswa', compact('kelas'));
     }

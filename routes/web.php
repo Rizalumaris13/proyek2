@@ -29,9 +29,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware(['auth'])->group(function () {
 
-    // Presensi Manual
-    Route::get('/kehadiran/manual', [KehadiranController::class, 'index'])
-        ->name('kehadiran.index');
+    Route::get('/kehadiran/manual/{kelas_id?}', [KehadiranController::class, 'index'])->name('kehadiran.index');
 
     Route::post('/kehadiran/store', [KehadiranController::class, 'store'])
         ->name('kehadiran.store');

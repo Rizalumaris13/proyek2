@@ -171,39 +171,62 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($siswa as $i => $s)
-                                <tr>
-                                    <td>{{ $i + 1 }}</td>
-                                    <td>{{ $s->nama }}</td>
-                                    <td>
-                                        <div class="attendance-group">
+                           @foreach ($siswa as $i => $s)
+    <tr>
+        <td>{{ $i + 1 }}</td>
+        <td>
+            {{ $s->nama }}
+            {{-- DEBUG: Tampilkan status jika ada --}}
+            @if(isset($kehadiranHariIni[$s->id]))
+                <br><small class="text-success">✓ Terdata: {{ $kehadiranHariIni[$s->id]->status }}</small>
+            @endif
+        </td>
+        <td>
+            <div class="attendance-group">
+                @php
+                    $options = [
+                        'hadir' => 'H',
+                        'sakit' => 'S',
+                        'izin'  => 'I',
+                        'alfa'  => 'A'
+                    ];
+                    
+                    // Tentukan status yang sudah ada
+                    $existingStatus = null;
+                    if(isset($kehadiranHariIni[$s->id])) {
+                        $existingStatus = $kehadiranHariIni[$s->id]->status;
+                        // DEBUG: Tampilkan ID kehadiran
+                        // {{-- <small class="text-muted">(ID: {{ $kehadiranHariIni[$s->id]->id }})</small> --}}
+                    }
+                @endphp
 
-                                            @php
-                                                $options = [
-                                                    'hadir' => 'H',
-                                                    'sakit' => 'S',
-                                                    'izin'  => 'I',
-                                                    'alfa'  => 'A'
-                                                ];
-                                            @endphp
-
-                                            @foreach ($options as $value => $label)
-                                                <div class="attendance-option">
-                                                    <input 
-                                                        type="radio"
-                                                        id="{{ $value . $s->id }}"
-                                                        name="kehadiran[{{ $s->id }}]"
-                                                        value="{{ $value }}"
-                                                        @if($value === 'hadir') checked @endif
-                                                    >
-                                                    <label for="{{ $value . $s->id }}">{{ $label }}</label>
-                                                </div>
-                                            @endforeach
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                @foreach ($options as $value => $label)
+                    <div class="attendance-option">
+                        <input 
+                            type="radio"
+                            id="{{ $value . $s->id }}"
+                            name="kehadiran[{{ $s->id }}]"
+                            value="{{ $value }}"
+                            @if($existingStatus === $value)
+                                checked
+                            @elseif(!$existingStatus && $value === 'hadir')
+                                checked
+                            @endif
+                        >
+                        <label for="{{ $value . $s->id }}">
+                            {{ $label }}
+                            @if($existingStatus === $value)
+                                <div class="position-absolute top-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                    <span class="visually-hidden">Selected</span>
+                                </div>
+                            @endif
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </td>
+    </tr>
+@endforeach
                         </tbody>
                     </table>
 
