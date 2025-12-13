@@ -127,22 +127,33 @@
                 <div class="col-md-9">
                     <form>
                         <div class="mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" value="Rizal Umaris" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">E-mail</label>
-                            <input type="email" class="form-control" value="RizalUmaris@smanu.sch.id" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <input type="text" class="form-control" value="Guru" disabled>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Tanggal bergabung</label>
-                            <input type="text" class="form-control" value="15 November 2025" disabled>
-                        </div>
-                        <button type="button" class="btn btn-success px-3 rounded-pill">Edit</button>
+    <label class="form-label">Nama Lengkap</label>
+    <input type="text" class="form-control"
+           value="{{ Auth::user()->name }}"
+           disabled>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">E-mail</label>
+    <input type="email" class="form-control"
+           value="{{ Auth::user()->email }}"
+           disabled>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Role</label>
+    <input type="text" class="form-control"
+           value="{{ ucfirst(Auth::user()->role) }}"
+           disabled>
+</div>
+
+<div class="mb-4">
+    <label class="form-label">Tanggal bergabung</label>
+    <input type="text" class="form-control"
+           value="{{ Auth::user()->created_at->translatedFormat('d F Y') }}"
+           disabled>
+</div>
+
                     </form>
                 </div>
             </div>

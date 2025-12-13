@@ -81,9 +81,13 @@
       box-shadow:0 10px 30px rgba(2,6,23,0.06);
     }
 
-    /* footer */
-    footer{padding:14px 28px;text-align:center;color:var(--muted);font-size:13px;background:transparent}
-
+    footer {
+            background: var(--brand);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+        }
   </style>
 </head>
 <body>
@@ -124,7 +128,7 @@
           <a class="nav-link" href="/presensi">Presensi Siswa</a>
           <a class="nav-link" href="/siswa">Data Siswa</a>
           <a class="nav-link" href="/kehadiran/statistik">Statistik Kehadiran</a>
-          <a class="nav-link" href="/profil">Profile</a>
+          <a class="nav-link" href="/profil">Profil</a>
         </nav>
       </div>
     </aside>
@@ -171,48 +175,79 @@
   <footer>
     © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
   </footer>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    const ctx = document.getElementById('attendanceChart');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: @json($months),
-        datasets: [
-  {
-    label:'Hadir',
-    data:@json($hadir),
-    backgroundColor:'rgba(63,123,255,0.9)'
-  },
-  {
-    label:'Izin',
-    data:@json($izin),
-    backgroundColor:'rgba(246,194,62,0.85)' // warna kuning
-  },
-  {
-    label:'Sakit',
-    data:@json($sakit),
-    backgroundColor:'rgba(28,200,138,0.85)' // warna hijau
-  },
-  {
-    label:'Alfa',
-    data:@json($alfa),
-    backgroundColor:'rgba(255,80,80,0.85)' // warna merah
-  }
-]
-
+<script>
+  const ctx = document.getElementById('attendanceChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: @json($months),
+      datasets: [
+        {
+          label:'Hadir',
+          data:@json($hadir),
+          backgroundColor:'rgba(63,123,255,0.9)'
+        },
+        {
+          label:'Izin',
+          data:@json($izin),
+          backgroundColor:'rgba(246,194,62,0.85)'
+        },
+        {
+          label:'Sakit',
+          data:@json($sakit),
+          backgroundColor:'rgba(28,200,138,0.85)'
+        },
+        {
+          label:'Alfa',
+          data:@json($alfa),
+          backgroundColor:'rgba(255,80,80,0.85)'
+        }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      scales: {
+        y: { 
+          beginAtZero: true,
+          ticks: {
+            precision: 0
+          }
+        }
       },
-      options: {
-        maintainAspectRatio:false,
-        scales:{
-          y:{ beginAtZero:true }
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,        // Lebar kotak di legend
+            padding: 15,
+            usePointStyle: true, // Gunakan pointStyle
+            pointStyle: 'rect',  // INI YANG DIUBAH: 'rect' untuk kotak
+            font: {
+              size: 13,
+              family: "'Inter', sans-serif",
+              weight: '500'
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 58, 128, 0.9)',
+          titleFont: {
+            family: "'Inter', sans-serif",
+            size: 12
+          },
+          bodyFont: {
+            family: "'Inter', sans-serif",
+            size: 13
+          },
+          padding: 12,
+          cornerRadius: 6
         }
       }
-    });
-  </script>
-
+    }
+  });
+</script>
 </body>
 </html>

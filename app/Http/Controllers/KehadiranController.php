@@ -7,6 +7,9 @@ use App\Models\Siswa;
 use App\Models\Kehadiran;
 use App\Models\Kelas;
 use App\Models\Guru;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class KehadiranController extends Controller
 {
@@ -52,33 +55,41 @@ class KehadiranController extends Controller
 
    public function store(Request $request)
 {
-    // VALIDASI INPUT
-    $request->validate([
-        'kehadiran' => 'required|array',
-        'kehadiran.*' => 'required|in:hadir,izin,sakit,alfa',
-        'kelas_id' => 'required|exists:kelas,id',
-    ]);
-
+    // DEBUG: Cek input
+    // dd($request->all(), auth()->id());
+    
     $guru = Guru::where('user_id', auth()->id())->first();
-
+    
+    // DEBUG: Cek data guru
     if (!$guru) {
-        return back()->with('error', 'Data guru tidak ditemukan.');
+        dd('Guru tidak ditemukan!', 'User ID:', auth()->id(), 'User:', auth()->user());
     }
-
+    
     $today = now()->toDateString();
     $kehadiranInput = $request->kehadiran;
-
-    // DEBUG: Tampilkan data yang akan disimpan
-    // dd($kehadiranInput, $guru->id);
-
+    
+    // DEBUG: Cek input kehadiran
+    // dd($kehadiranInput, 'Guru ID:', $guru->id);
+    
     foreach ($kehadiranInput as $siswa_id => $status) {
         
-        // Gunakan updateOrCreate agar tidak duplikat
+        if (!in_array($status, ['hadir', 'izin', 'sakit', 'alfa'])) {
+            continue;
+        }
+
+        // DEBUG SETIAP ITERASI
+        // dd([
+        //     'siswa_id' => $siswa_id,
+        //     'status' => $status,
+        //     'guru_id' => $guru->id,
+        //     'tanggal' => $today
+        // ]);
+        
         Kehadiran::updateOrCreate(
             [
                 'siswa_id' => $siswa_id,
                 'tanggal'  => $today,
-                'guru_id'  => $guru->id, // PASTIKAN INI ADA
+                'guru_id'  => $guru->id, // INI YANG PERLU DIPASTIKAN
             ],
             [
                 'status'   => $status,
@@ -86,7 +97,6 @@ class KehadiranController extends Controller
         );
     }
 
-    // Redirect ke halaman yang sama dengan kelas_id
     return redirect()->route('kehadiran.index', ['kelas_id' => $request->kelas_id])
                     ->with('success', 'Data kehadiran berhasil disimpan!');
 }

@@ -18,6 +18,7 @@
         body {
             background: var(--bg);
             font-family: 'Inter', sans-serif;
+            margin: 0;
         }
 
         .topbar {
@@ -38,9 +39,17 @@
 
         .sidebar-card, .panel {
             background: #fff;
-            padding: 22px;
             border-radius: 14px;
             box-shadow: 0 6px 18px rgba(15, 58, 128, 0.06);
+        }
+
+        .sidebar-card {
+            padding: 22px;
+        }
+
+        .panel {
+            padding: 22px;
+            margin-bottom: 20px;
         }
 
         .nav-link {
@@ -49,6 +58,8 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 6px;
+            text-decoration: none;
+            display: block;
         }
 
         .nav-link.active {
@@ -61,11 +72,88 @@
             height: 280px;
             border: 2px dashed #c7c7c7;
             border-radius: 12px;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            color:#7b8794;
-            font-size:18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #7b8794;
+            font-size: 18px;
+        }
+
+        /* ===== RAPIHAN TAMBAHAN ===== */
+        .kelas-item {
+            background: #f8f9fb;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .kelas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .kelas-title {
+            font-weight: 700;
+            color: #333;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .kelas-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .kelas-mapel {
+            color: #888;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .kelas-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .kelas-actions .btn {
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 6px;
+        }
+
+        .date-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .panel-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            color: #856404;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        footer {
+            background: var(--brand);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -109,56 +197,65 @@
 
         {{-- PANEL KAMERA --}}
         <div class="panel">
-            <h6 class="fw-bold mb-3">Presensi Otomatis</h6>
+            <div class="panel-title">Presensi Otomatis</div>
             <div class="camera-box">📷 Kamera belum terhubung</div>
         </div>
 
-       {{-- PANEL KELAS & DATA --}}
-<div class="panel">
+        {{-- PANEL KELAS & DATA --}}
+        <div class="panel">
+            <div class="panel-title">Kelas Yang Anda Ampu</div>
+            <div class="date-info">{{ now()->translatedFormat('l, d F Y') }}</div>
 
-    <h6 class="fw-bold mb-2">Kelas Yang Anda Ampu</h6>
-    <p class="text-muted">{{ now()->translatedFormat('l, d F Y') }}</p>
-
-    {{-- CEK JIKA GURU TIDAK PUNYA KELAS --}}
-    @if (!isset($kelas) || $kelas->isEmpty())
-        <div class="alert alert-warning">
-            Anda belum memiliki kelas yang diampu.
-        </div>
-    @else
-
-        @foreach ($kelas as $k)
-            <div class="p-3 rounded mb-3" style="background:#f8f9fb;border:1px solid #eee;">
-                
-                <strong>{{ $k->nama_kelas }}</strong><br>
-
-                {{-- CEK KALAU siswa_count ADA --}}
-                Jumlah siswa: 
-                {{ $k->siswa_count ?? $k->siswa()->count() }} orang
-
-                <div class="mt-3 d-flex gap-2">
-                    <a href="{{ route('kehadiran.index', ['kelas_id' => $k->id]) }}"
-                       class="btn btn-secondary btn-sm">
-                        Presensi Manual
-                    </a>
-
-                    <button class="btn btn-primary btn-sm">
-                        Generate Face Recognition
-                    </button>
-
-                    <button class="btn btn-outline-secondary btn-sm">
-                        Validasi
-                    </button>
+            {{-- CEK JIKA GURU TIDAK PUNYA KELAS --}}
+            @if (!isset($kelas) || $kelas->isEmpty())
+                <div class="alert-warning">
+                    Anda belum memiliki kelas yang diampu.
                 </div>
-            </div>
-        @endforeach
+            @else
+                @foreach ($kelas as $k)
+                    <div class="kelas-item">
+                        <div class="kelas-header">
+                            <div>
+                                <div class="kelas-title">{{ $k->nama_kelas }}</div>
+                                <div class="kelas-info">
+                                    Jumlah siswa: {{ $k->siswa_count ?? $k->siswa()->count() }} orang
+                                </div>
+                            </div>
+                        </div>
 
-    @endif
+                        {{-- MAPEL --}}
+                        <div class="kelas-mapel">
+                            Mapel: 
+                            @if ($k->gurus && $k->gurus->count())
+                                @foreach ($k->gurus as $g)
+                                    <span>{{ $g->mapel }}</span>
+                                    @if (!$loop->last), @endif
+                                @endforeach
+                            @else
+                                <span class="text-muted">Belum ada guru/mapel</span>
+                            @endif
+                        </div>
 
-</div>
+                        {{-- ACTION BUTTONS --}}
+                        <div class="kelas-actions">
+                            <a href="{{ route('kehadiran.index', ['kelas_id' => $k->id]) }}"
+                               class="btn btn-secondary btn-sm">
+                                Presensi Manual
+                            </a>
+                            <button class="btn btn-primary btn-sm">
+                                Generate Face Recognition
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
 
     </main>
 
 </div>
-
+ <footer>
+    © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
+  </footer>
 </body>
 </html>

@@ -216,8 +216,8 @@
     </div>
 
     <footer>
-        © 2025 SMA NU Tenajar Kidul. All rights reserved.
-    </footer>
+    © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
+  </footer>
 </body>
 
 </html>
