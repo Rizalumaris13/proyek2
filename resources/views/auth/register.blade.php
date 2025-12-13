@@ -109,11 +109,10 @@
       </div>
 
       <nav class="d-none d-md-flex">
-        <a href="#" class="nav-link">Beranda</a>
-        <a href="#" class="nav-link">Berita</a>
-        <a href="#" class="nav-link">Profil Sekolah</a>
-        <a href="#" class="nav-link">Guru dan TU</a>
-        <a href="#" class="nav-link">Galeri</a>
+        <a href="#home" class="nav-link">Beranda</a>
+        <a href="#profile" class="nav-link">Profil Sekolah</a>
+        <a href="#gallery" class="nav-link">Galeri</a>
+        <a href="#contact" class="nav-link">Kontak</a>
       </nav>
     </div>
   </header>
