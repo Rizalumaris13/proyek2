@@ -14,16 +14,20 @@ return new class extends Migration
     public function up()
 {
     Schema::table('siswa', function (Blueprint $table) {
-        $table->unsignedBigInteger('kelas_id')->nullable()->after('jenis_kelamin');
-        $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('set null');
+        if (!Schema::hasColumn('siswa', 'kelas_id')) {
+            $table->unsignedBigInteger('kelas_id')->nullable()->after('jenis_kelamin');
+            $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('set null');
+        }
     });
 }
 
 public function down()
 {
     Schema::table('siswa', function (Blueprint $table) {
-        $table->dropForeign(['kelas_id']);
-        $table->dropColumn('kelas_id');
+        if (Schema::hasColumn('siswa', 'kelas_id')) {
+            $table->dropForeign(['kelas_id']);
+            $table->dropColumn('kelas_id');
+        }
     });
 }
 };

@@ -77,7 +77,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // redirect ke halaman yang diinginkan
-        return redirect()->route('auth.login')->with('success', 'Registrasi berhasil. Selamat datang!');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login!');
     }
 
     /**
