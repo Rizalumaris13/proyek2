@@ -27,6 +27,6 @@ class LandingController extends Controller
             asset('images/juara2.jpg'),
         ];
 
-        return view('landingpage', compact('hero', 'events', 'galleries'));
+        return view('auth.landingpage', compact('hero', 'events', 'galleries'));
     }
 }

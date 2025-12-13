@@ -8,6 +8,10 @@ use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\KehadiranStatistikController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\LandingController;
+
+// Landing Page
+Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
 
 Route::get('/', function () {
     return redirect()->route('dashboard');

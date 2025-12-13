@@ -16,7 +16,5 @@ class Gallery extends Model
         // gunakan storage:link (public disk)
         return asset('public/images' . $this->images);
 
-        
-
     }
 }

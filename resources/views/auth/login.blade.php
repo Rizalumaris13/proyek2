@@ -102,7 +102,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <div class="brand">
         {{-- letakkan logo di public/images/logo.png atau ubah path --}}
-        <img src="{{ asset('') }}" alt="logo">
+        <img src="{{ asset('images/logo.png') }}" alt="logo">
         <div>
           <div style="font-weight:800">SMA NU</div>
           <div style="font-size:12px;color:#6b7a99">Tenajar Kidul</div>
@@ -110,11 +110,10 @@
       </div>
 
       <nav class="d-none d-md-flex">
-        <a href="#" class="nav-link">Beranda</a>
-        <a href="#" class="nav-link">Berita</a>
-        <a href="#" class="nav-link">Profil Sekolah</a>
-        <a href="#" class="nav-link">Guru dan TU</a>
-        <a href="#" class="nav-link">Galeri</a>
+        <a href="#home" class="nav-link">Beranda</a>
+        <a href="#profile" class="nav-link">Profil Sekolah</a>
+        <a href="#gallery" class="nav-link">Galeri</a>
+        <a href="#contact" class="nav-link">Kontak</a>
       </nav>
     </div>
   </header>
