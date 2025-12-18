@@ -13,23 +13,69 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
 {
-    $kelasList = Kelas::all();
-
+    $user = auth()->user();
     $filterKelas = $request->kelas_id;
 
-    $query = Siswa::with('kelas')->orderBy('nama', 'asc');
+    // =========================
+    // JIKA ADMIN
+    // =========================
+    if ($user->role === 'admin') {
 
-    if ($filterKelas) {
-        $query->where('kelas_id', $filterKelas);
+        $kelasList = Kelas::all();
+
+        $query = Siswa::with('kelas')->orderBy('nama', 'asc');
+
+        if ($filterKelas) {
+            $query->where('kelas_id', $filterKelas);
+        }
+
+        $dataSiswa = $query->paginate(200)->appends($request->query());
+
+        return view('siswa.data-siswa', compact(
+            'kelasList',
+            'dataSiswa',
+            'filterKelas'
+        ));
     }
 
-    $dataSiswa = $query->paginate(10)->appends($request->query());
+    // =========================
+    // JIKA GURU
+    // =========================
+    if ($user->role === 'guru') {
 
-    return view('siswa.data-siswa', compact('kelasList', 'dataSiswa', 'filterKelas'));
+        $guru = $user->guru;
+
+        // kelas yang diajar guru
+        $kelasList = $guru->kelas;
+
+        $kelasIds = $kelasList->pluck('id');
+
+        $query = Siswa::with('kelas')
+            ->whereIn('kelas_id', $kelasIds)
+            ->orderBy('nama', 'asc');
+
+        // filter hanya boleh di kelas yg diajar
+        if ($filterKelas && $kelasIds->contains($filterKelas)) {
+            $query->where('kelas_id', $filterKelas);
+        }
+
+        $dataSiswa = $query->paginate(200)->appends($request->query());
+
+        return view('siswa.data-siswa', compact(
+            'kelasList',
+            'dataSiswa',
+            'filterKelas'
+        ));
+    }
+
+    abort(403);
 }
 
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+    abort(403);
+}
         $kelasList = Kelas::all();
         return view('siswa.form', compact('kelasList'));
     }
@@ -37,11 +83,16 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+    abort(403);
+}
+
         $request->validate([
             'nama' => 'required',
             'nisn' => 'required|unique:siswa',
             'jenis_kelamin' => 'required',
             'kelas_id' => 'required|exists:kelas,id',
+            'alamat' => 'required|string',
         ]);
 
         Siswa::create([
@@ -49,6 +100,7 @@ class SiswaController extends Controller
             'nisn' => $request->nisn,
             'jenis_kelamin' => $request->jenis_kelamin,
             'kelas_id' => $request->kelas_id,
+            'alamat' => $request->alamat,
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambah');
@@ -60,6 +112,9 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
+        if (auth()->user()->role !== 'admin') {
+    abort(403);
+}
         $siswa = Siswa::findOrFail($id);
         $kelasList = Kelas::all();
 
@@ -69,6 +124,9 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (auth()->user()->role !== 'admin') {
+    abort(403);
+}
         $siswa = Siswa::findOrFail($id);
 
         $request->validate([
@@ -76,6 +134,7 @@ class SiswaController extends Controller
             'nisn' => 'required|string|max:50|unique:siswa,nisn,' . $siswa->id,
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'kelas_id' => 'required|exists:kelas,id',
+            'alamat' => 'required|string|max:500',
         ]);
 
         $siswa->update([
@@ -83,6 +142,7 @@ class SiswaController extends Controller
             'nisn' => $request->nisn,
             'jenis_kelamin' => $request->jenis_kelamin,
             'kelas_id' => $request->kelas_id,   // FIX terpenting!
+            'alamat' => $request->alamat,
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diperbarui!');

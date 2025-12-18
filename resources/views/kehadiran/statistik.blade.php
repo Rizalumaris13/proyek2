@@ -1,192 +1,208 @@
 <!doctype html>
 <html lang="id">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Statistik Kehadiran — Sistem Presensi Cerdas</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistik Kehadiran — Sistem Presensi Cerdas</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        :root {
-            --brand: #0f3a80;
-            --accent: #3f7bff;
-            --bg: #f5f6f8;
-            --hadir: #4e73df;
-            --izin: #f6c23e;
-            --sakit: #1cc88a;
-            --alfa: #e74a3b;
-        }
+<style>
+:root{
+  --brand:#0f3a80;
+  --accent:#3f7bff;
+  --bg:#f5f6f8;
+  --hadir:#4e73df;
+  --izin:#f6c23e;
+  --sakit:#1cc88a;
+  --alfa:#e74a3b;
+}
 
-        body {
-            background: var(--bg);
-            font-family: 'Inter', sans-serif;
-        }
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:'Inter',sans-serif;
+}
 
-        .topbar {
-            background: var(--brand);
-            color: #fff;
-            padding: 14px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* ================= HEADER ================= */
+.topbar{
+  background:var(--brand);
+  color:#fff;
+  padding:14px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-        .app {
-            padding: 28px;
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            gap: 24px;
-        }
+/* ================= LAYOUT ================= */
+.app{
+  padding:28px;
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:24px;
+}
 
-        .sidebar-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 6px 18px rgba(15, 58, 128, 0.06);
-            height: fit-content;
-        }
+/* ================= SIDEBAR ================= */
+.sidebar-card{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(15,58,128,.06);
+}
 
-        .nav-link {
-            font-weight: 600;
-            color: #333;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-        }
+.nav-link{
+  display:block;
+  font-weight:600;
+  color:#333;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:6px;
+  text-decoration:none;
+}
 
-        .nav-link.active {
-            background: linear-gradient(90deg, var(--accent), #2f63d6);
-            color: #fff;
-        }
+.nav-link.active{
+  background:linear-gradient(90deg,var(--accent),#2f63d6);
+  color:#fff;
+}
 
-        .panel {
-            background: #fff;
-            padding: 22px;
-            border-radius: 14px;
-            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
-            margin-bottom: 24px;
-        }
+/* ================= PANEL ================= */
+.panel{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+  margin-bottom:24px;
+}
 
-        .stat-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-left: 4px solid;
-        }
+/* ================= STAT CARD ================= */
+.stat-card{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  border-left:4px solid;
+}
+.stat-card.hadir{border-left-color:var(--hadir)}
+.stat-card.izin{border-left-color:var(--izin)}
+.stat-card.sakit{border-left-color:var(--sakit)}
+.stat-card.alfa{border-left-color:var(--alfa)}
 
-        .stat-card.hadir { border-left-color: var(--hadir); }
-        .stat-card.izin { border-left-color: var(--izin); }
-        .stat-card.sakit { border-left-color: var(--sakit); }
-        .stat-card.alfa { border-left-color: var(--alfa); }
+.stat-number{
+  font-size:28px;
+  font-weight:800;
+}
 
-        .stat-number {
-            font-size: 28px;
-            font-weight: 800;
-            color: #333;
-        }
+/* ================= CHART ================= */
+.chart-container{
+  background:#fff;
+  padding:26px;
+  border-radius:18px;
+  height:400px;
+}
 
-        .stat-percent {
-            font-size: 14px;
-            color: #666;
-            font-weight: 600;
-        }
+/* ================= FOOTER ================= */
+footer{
+  background:var(--brand);
+  color:#fff;
+  text-align:center;
+  padding:10px;
+  font-size:13px;
+}
 
-        th {
-            background: #f8f9fb;
-            color: var(--brand);
-            font-weight: 700;
-        }
+/* ================= OVERLAY ================= */
+.sidebar-overlay{display:none}
 
-        footer {
-            background: var(--brand);
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            font-size: 13px;
-        }
+/* ================= MOBILE MODE ================= */
+@media (max-width:768px){
+  .app{
+    grid-template-columns:1fr;
+    padding:16px;
+  }
 
-        .chart-container {
-            background: #fff;
-            padding: 26px;
-            border-radius: 18px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-            height: 400px;
-            position: relative;
-        }
+  aside.sidebar{
+    position:fixed;
+    top:0;
+    left:-280px;
+    width:260px;
+    height:100vh;
+    z-index:1050;
+    transition:left .3s;
+  }
 
-        /* LEGEND KOTAK */
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
+  body.sidebar-open aside.sidebar{
+    left:0;
+  }
 
-        .legend-box.hadir { background-color: rgba(63,123,255,0.9); }
-        .legend-box.izin { background-color: rgba(246,194,62,0.85); }
-        .legend-box.sakit { background-color: rgba(28,200,138,0.85); }
-        .legend-box.alfa { background-color: rgba(255,80,80,0.85); }
+  .sidebar-card{
+    height:100%;
+    border-radius:0;
+  }
 
-        .legend-item {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 15px;
-            font-size: 13px;
-            color: #495057;
-            font-weight: 500;
-        }
+  .sidebar-overlay{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:1040;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+  }
 
-        /* Untuk legend chart yang lebih kecil */
-        .chart-legend-box {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            display: inline-block;
-            margin-right: 6px;
-        }
-    </style>
+  body.sidebar-open .sidebar-overlay{
+    opacity:1;
+    pointer-events:auto;
+  }
+}
+</style>
 </head>
 
 <body>
 
-    {{-- HEADER --}}
-    <header class="topbar">
-        <div class="d-flex align-items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" style="height:34px;">
-            <div>
-                <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
-                <small>SMA NU Tenajar Kidul</small>
-            </div>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <div style="color:rgba(255,255,255,0.9);font-weight:600">
-                Halo, {{ Auth::user()->name ?? 'Admin' }}
-            </div>
-            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">Logout</a>
-            <form id="logout-form" action="{{Route ('logout')}}" method="POST" style="display:none">@csrf</form>
-        </div>
-    </header>
+<!-- ================= HEADER ================= -->
+<header class="topbar">
+  <div class="d-flex align-items-center gap-3">
+    <img src="{{ asset('images/logo.png') }}" style="height:34px">
+    <div>
+      <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
+      <small>SMA NU Tenajar Kidul</small>
+    </div>
+  </div>
 
-    <div class="app">
+  <div class="d-none d-md-flex align-items-center gap-3">
+      <div style="font-weight:600">
+        Halo, {{ Auth::user()->name ?? 'Admin' }}
+      </div>
 
-        {{-- SIDEBAR --}}
-        <aside>
-            <div class="sidebar-card">
-                <nav class="nav flex-column">
-                    <a class="nav-link" href="/dashboard">Dashboard</a>
-                    <a class="nav-link" href="/presensi">Presensi Siswa</a>
-                    <a class="nav-link" href="/siswa">Data Siswa</a>
-                    <a class="nav-link active" href="/kehadiran/statistik">Statistik Kehadiran</a>
-                    <a class="nav-link" href="/profil">Profil</a>
-                </nav>
-            </div>
-        </aside>
+      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
+        Logout
+      </a>
+    </div>
+    <!-- HAMBURGER -->
+    <button class="btn btn-link text-white d-md-none"
+            onclick="toggleSidebar()"
+            style="font-size:22px;text-decoration:none">☰</button>
+  </div>
+</header>
+
+<!-- ================= APP ================= -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <nav class="nav flex-column">
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link" href="/presensi">Presensi Siswa</a>
+        <a class="nav-link" href="/siswa">Data Siswa</a>
+        <a class="nav-link active" href="/kehadiran/statistik">Statistik Kehadiran</a>
+        <a class="nav-link" href="/profil">Profil</a>
+      </nav>
+    </div>
+  </aside>
+
 
         {{-- KONTEN UTAMA --}}
         <main>
@@ -359,7 +375,7 @@
         </main>
 
     </div>
-
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <footer>
         © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
     </footer>
@@ -477,6 +493,10 @@
             });
         });
     </script>
-
+<script>
+function toggleSidebar(){
+  document.body.classList.toggle('sidebar-open');
+}
+</script>
 </body>
 </html>
