@@ -10,12 +10,16 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\LandingController;
 
+<<<<<<< Updated upstream
 // Landing Page
 Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+=======
+Route::get('/landingpage', [LandingController::class, 'index']);
+>>>>>>> Stashed changes
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
