@@ -10,16 +10,12 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\LandingController;
 
-<<<<<<< Updated upstream
 // Landing Page
 Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
-=======
-Route::get('/landingpage', [LandingController::class, 'index']);
->>>>>>> Stashed changes
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
@@ -49,8 +45,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index'])
         ->name('kehadiran.statistik');
 });
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
