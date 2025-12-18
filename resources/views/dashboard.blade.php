@@ -11,6 +11,7 @@
 
   <!-- Optional: Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
   <style>
     :root{
@@ -30,14 +31,21 @@
     }
 
     /* Header */
-    .topbar{
-      background:var(--brand);
-      color:#fff;
-      padding:14px 22px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
+    .topbar {
+  background: var(--brand);
+  color: #fff;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{height:34px}
     .brand h5{margin:0;font-weight:700;letter-spacing:0.3px}
@@ -88,34 +96,94 @@
             padding: 10px;
             font-size: 13px;
         }
+        /* ===== RESPONSIVE SIDEBAR ===== */
+@media (max-width: 768px) {
+
+  .app {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100vh;
+    background: transparent;
+    z-index: 1050;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar-card {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  body.sidebar-open .sidebar {
+    left: 0;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  body.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+/* ===== FIX CHART RESPONSIVE INSTANT ===== */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 320px; /* WAJIB ADA */
+}
+
   </style>
 </head>
 <body>
 
-  {{-- Topbar --}}
   <header class="topbar">
-    <div class="brand">
-      <img src="{{ asset('images/logo.png') }}" alt="logo">
-      <div>
-        <h5>Sistem Presensi Cerdas</h5>
-        <div style="font-size:12px;color:rgba(255,255,255,0.85)">SMA NU Tenajar Kidul</div>
+  <!-- KIRI: BRAND (JANGAN DIUBAH POSISINYA) -->
+  <div class="brand">
+    <img src="{{ asset('images/logo.png') }}" alt="logo">
+    <div>
+      <h5>Sistem Presensi Cerdas</h5>
+      <div style="font-size:12px;color:rgba(255,255,255,0.85)">
+        SMA NU Tenajar Kidul
       </div>
     </div>
+  </div>
 
-    <div class="d-flex align-items-center gap-3">
-      <div style="color:rgba(255,255,255,0.9);font-weight:600">
+  <!-- KANAN: AKSI -->
+  <div class="topbar-actions">
+    <!-- tombol hamburger (HP saja) -->
+    <button class="btn btn-link text-white d-md-none"
+            onclick="toggleSidebar()"
+            aria-label="Toggle menu"
+            style="font-size:22px;text-decoration:none">
+      ☰
+    </button>
+
+    <!-- desktop only -->
+    <div class="d-none d-md-flex align-items-center gap-3">
+      <div style="font-weight:600">
         Halo, {{ Auth::user()->name ?? 'Admin' }}
       </div>
 
       <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
         Logout
       </a>
-
-      <form id="logout-form" action="{{ Route('logout') }}" method="POST" style="display:none">
-        @csrf
-      </form>
     </div>
-  </header>
+  </div>
+</header>
 
   {{-- Main app grid --}}
   <div class="app container-fluid">
@@ -164,9 +232,10 @@
           Grafik Total Kehadiran Siswa
         </h6>
 
-        <div style="background:#fff;padding:18px;border-radius:12px">
-          <canvas id="attendanceChart" height="220"></canvas>
-        </div>
+        <div class="chart-wrapper">
+  <canvas id="attendanceChart"></canvas>
+</div>
+
       </section>
 
     </main>
@@ -175,79 +244,73 @@
   <footer>
     © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
   </footer>
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+let attendanceChart = null;
+
+function renderChart() {
   const ctx = document.getElementById('attendanceChart');
-  new Chart(ctx, {
+
+  if (attendanceChart) {
+    attendanceChart.destroy();
+  }
+
+  attendanceChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: @json($months),
       datasets: [
-        {
-          label:'Hadir',
-          data:@json($hadir),
-          backgroundColor:'rgba(63,123,255,0.9)'
-        },
-        {
-          label:'Izin',
-          data:@json($izin),
-          backgroundColor:'rgba(246,194,62,0.85)'
-        },
-        {
-          label:'Sakit',
-          data:@json($sakit),
-          backgroundColor:'rgba(28,200,138,0.85)'
-        },
-        {
-          label:'Alfa',
-          data:@json($alfa),
-          backgroundColor:'rgba(255,80,80,0.85)'
-        }
+        { label:'Hadir', data:@json($hadir), backgroundColor:'rgba(63,123,255,0.9)' },
+        { label:'Izin',  data:@json($izin),  backgroundColor:'rgba(246,194,62,0.85)' },
+        { label:'Sakit', data:@json($sakit), backgroundColor:'rgba(28,200,138,0.85)' },
+        { label:'Alfa',  data:@json($alfa),  backgroundColor:'rgba(255,80,80,0.85)' }
       ]
     },
     options: {
+      responsive: true,
       maintainAspectRatio: false,
+      animation: false,
+      resizeDelay: 0,
       scales: {
-        y: { 
+        y: {
           beginAtZero: true,
-          ticks: {
-            precision: 0
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            boxWidth: 12,        // Lebar kotak di legend
-            padding: 15,
-            usePointStyle: true, // Gunakan pointStyle
-            pointStyle: 'rect',  // INI YANG DIUBAH: 'rect' untuk kotak
-            font: {
-              size: 13,
-              family: "'Inter', sans-serif",
-              weight: '500'
-            }
-          }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(15, 58, 128, 0.9)',
-          titleFont: {
-            family: "'Inter', sans-serif",
-            size: 12
-          },
-          bodyFont: {
-            family: "'Inter', sans-serif",
-            size: 13
-          },
-          padding: 12,
-          cornerRadius: 6
+          ticks: { precision: 0 }
         }
       }
     }
   });
+}
+
+/* ===== EVENT YANG BENAR-BENAR DIPERLUKAN ===== */
+
+// 1. Setelah halaman BENAR-BENAR selesai
+window.addEventListener('load', () => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(renderChart);
+  });
+});
+
+// 2. Saat HP diputar
+window.addEventListener('orientationchange', () => {
+  setTimeout(renderChart, 200);
+});
+
+// 3. Saat tab balik aktif (INI YANG TADI KENA)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    setTimeout(renderChart, 150);
+  }
+});
 </script>
+<script>
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-open');
+  setTimeout(() => {
+    renderChart();
+  }, 300);
+}
+</script>
+
 </body>
 </html>

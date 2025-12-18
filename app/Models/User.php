@@ -33,10 +33,16 @@ class User extends Authenticatable
     }
     
     // ✅ Optional: Helper methods
-    public function isGuru()
-    {
-        return !is_null($this->guru);
-    }
+    public function isAdmin()
+{
+    return $this->role === 'admin';
+}
+
+public function isGuru()
+{
+    return $this->role === 'guru';
+}
+
     
     public function getMapelAttribute()
     {
