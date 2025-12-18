@@ -180,7 +180,10 @@
                                 <th>NISN</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Sinkronkan Wajah</th>
-                                <th>Edit</th>
+                                @if(Auth::user()->role === 'admin')
+    <th>Edit</th>
+@endif
+
                             </tr>
                         </thead>
                       <tbody>
@@ -191,11 +194,14 @@
     <td>{{ $siswa->nisn }}</td>
     <td>{{ $siswa->jenis_kelamin }}</td>
     <td>X</td>
-    <td>
-        <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
-            ✏️ Edit
-        </a>
-    </td>
+    @if(Auth::user()->role === 'admin')
+<td>
+    <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
+        ✏️ Edit
+    </a>
+</td>
+@endif
+
 </tr>
 
                         @empty
@@ -207,9 +213,11 @@
                     </table>
                 </div>
 
-                <div class="mt-3 text-end">
-    <a href="{{ route('siswa.create') }}" class="btn-tambah">Tambah Siswa</a>
-</div>
+               @if(Auth::user()->role === 'admin')
+    <div class="mt-3 text-end">
+        <a href="{{ route('siswa.create') }}" class="btn-tambah">Tambah Siswa</a>
+    </div>
+@endif
 
             </div>
         </main>

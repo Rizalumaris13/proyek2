@@ -47,8 +47,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index'])
         ->name('kehadiran.statistik');
 });
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');

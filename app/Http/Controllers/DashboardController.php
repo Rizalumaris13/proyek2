@@ -10,18 +10,89 @@ use App\Models\Kelas;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Ambil guru yang login
-        $user = auth()->user();
-        $guru = $user->guru ?? Guru::where('user_id', $user->id)->first();
-        
+{
+    $user = auth()->user();
+
+    // =====================================
+    // JIKA ADMIN
+    // =====================================
+    if ($user->role === 'admin') {
+
+        $totalStudents = Siswa::count();
+
+        $today = now()->toDateString();
+
+        $todayPresent = Kehadiran::where('tanggal', $today)
+            ->where('status', 'hadir')
+            ->count();
+
+        $recentActivity = Kehadiran::where('tanggal', $today)->count();
+
+        $kelasGuru = Kelas::all();
+        $kelasCount = $kelasGuru->count();
+
+        $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        $tahunIni = now()->year;
+        $hadir = $sakit = $izin = $alfa = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $hadir[] = Kehadiran::whereMonth('tanggal', $i)
+                ->whereYear('tanggal', $tahunIni)
+                ->where('status', 'hadir')
+                ->count();
+
+            $sakit[] = Kehadiran::whereMonth('tanggal', $i)
+                ->whereYear('tanggal', $tahunIni)
+                ->where('status', 'sakit')
+                ->count();
+
+            $izin[] = Kehadiran::whereMonth('tanggal', $i)
+                ->whereYear('tanggal', $tahunIni)
+                ->where('status', 'izin')
+                ->count();
+
+            $alfa[] = Kehadiran::whereMonth('tanggal', $i)
+                ->whereYear('tanggal', $tahunIni)
+                ->where('status', 'alfa')
+                ->count();
+        }
+
+        $recentAttendances = Kehadiran::with(['siswa'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('dashboard', compact(
+            'totalStudents',
+            'todayPresent',
+            'recentActivity',
+            'kelasCount',
+            'months',
+            'hadir',
+            'sakit',
+            'izin',
+            'alfa',
+            'kelasGuru',
+            'recentAttendances',
+            'tahunIni'
+        ));
+    }
+
+    // =====================================
+    // JIKA GURU (KODE LAMA, TETAP DIPAKAI)
+    // =====================================
+    if ($user->role === 'guru') {
+
+        $guru = $user->guru;
+
         if (!$guru) {
             return back()->with('error', 'Anda belum terdaftar sebagai guru.');
         }
 
-        // Ambil kelas yang diajar guru
         $kelasGuru = $guru->kelas;
-        
+
         if ($kelasGuru->isEmpty()) {
             return view('dashboard', [
                 'totalStudents' => 0,
@@ -39,34 +110,29 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Ambil semua siswa dari kelas yang diajar
         $kelasIds = $kelasGuru->pluck('id');
         $siswaIds = Siswa::whereIn('kelas_id', $kelasIds)->pluck('id');
 
-        // Total siswa di kelas yang diajar
         $totalStudents = $siswaIds->count();
 
-        // Hadir hari ini
         $today = now()->toDateString();
+
         $todayPresent = Kehadiran::where('tanggal', $today)
             ->where('status', 'hadir')
             ->whereIn('siswa_id', $siswaIds)
             ->where('guru_id', $guru->id)
             ->count();
 
-        // Aktivitas terbaru (kehadiran hari ini)
         $recentActivity = Kehadiran::where('tanggal', $today)
             ->whereIn('siswa_id', $siswaIds)
             ->where('guru_id', $guru->id)
             ->count();
 
-        // Jumlah kelas yang diajar
         $kelasCount = $kelasGuru->count();
 
-        // Data kehadiran per bulan TAHUN INI
         $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
                   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        
+
         $tahunIni = now()->year;
         $hadir = $sakit = $izin = $alfa = [];
 
@@ -77,21 +143,21 @@ class DashboardController extends Controller
                 ->whereIn('siswa_id', $siswaIds)
                 ->where('guru_id', $guru->id)
                 ->count();
-                
+
             $sakit[] = Kehadiran::whereMonth('tanggal', $i)
                 ->whereYear('tanggal', $tahunIni)
                 ->where('status', 'sakit')
                 ->whereIn('siswa_id', $siswaIds)
                 ->where('guru_id', $guru->id)
                 ->count();
-                
+
             $izin[] = Kehadiran::whereMonth('tanggal', $i)
                 ->whereYear('tanggal', $tahunIni)
                 ->where('status', 'izin')
                 ->whereIn('siswa_id', $siswaIds)
                 ->where('guru_id', $guru->id)
                 ->count();
-                
+
             $alfa[] = Kehadiran::whereMonth('tanggal', $i)
                 ->whereYear('tanggal', $tahunIni)
                 ->where('status', 'alfa')
@@ -100,7 +166,6 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        // Kehadiran terbaru (5 data terakhir)
         $recentAttendances = Kehadiran::with('siswa')
             ->whereIn('siswa_id', $siswaIds)
             ->where('guru_id', $guru->id)
@@ -123,4 +188,7 @@ class DashboardController extends Controller
             'tahunIni'
         ));
     }
+
+    abort(403);
+}
 }

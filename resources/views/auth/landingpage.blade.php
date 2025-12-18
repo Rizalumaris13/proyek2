@@ -191,7 +191,12 @@
 Dengan lingkungan belajar yang religius, disiplin, dan berkarakter, SMA NU Tenajar Kidul terus berupaya menciptakan lulusan yang berdaya saing tinggi, berwawasan luas, serta siap menghadapi tantangan zaman. Melalui berbagai kegiatan akademik dan ekstrakurikuler, sekolah ini menumbuhkan semangat belajar, 
 kreativitas, dan kepedulian sosial pada setiap siswanya.
       </p>
-      <p style="color:var(--muted);margin-top:8px"><strong>Visi :</strong> Mewujudkan lulusan berakhlak dan kompeten.</p>
+      <p style="color:var(--muted);margin-top:8px"><strong>Visi :</strong> <br> "TAJUG" <br> "Mempersiapkan Pribadi yang Terampil, Aktual, Jenius, Ulet, Giat"</p>
+      <p style="color:var(--muted);margin-top:8px"><strong>Misi :</strong><br> 1. Mempertahankan dan mengaktualisasikan faham Islam Ahlusunnah Walja'ah.<br>
+                                                                           2. Mengintegrasikan akhlak mulia , iman dan ilmu pengetahuan dalam perilaku sehari-hari.<br>
+                                                                           3. Menyiapkan peserta didik yang memiliki kompetisi keilmuan berbasis teknologi informasi dan komunikasi.<br>
+                                                                           4. Menyiapkan peserta didik yang siap dan berkualitas untuk modal dalam dunia kerja.<br>
+                                                                           5. Menyiapkan peserta didik yang disiplin dan bertanggung jawab serta siap dalam menghadapi tantangan di Masyarakat.</p>
     </div>
   </div>
 
@@ -222,7 +227,7 @@ kreativitas, dan kepedulian sosial pada setiap siswanya.
             <h4>HUBUNGI KAMI</h4>
             <div class="footer-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Telp">
-                <a href="tel:087708858370">0877-0885-8370</a>
+                <a href="tel:087708858370">0821-3001-1005</a>
             </div>
 
             <div class="footer-icon">
@@ -248,7 +253,7 @@ kreativitas, dan kepedulian sosial pada setiap siswanya.
             <h4>IKUTI KAMI</h4>
             <div class="footer-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-                <a href="https://facebook.com/" target="_blank">SMA NU Tenajar Kidul</a>
+                <a href="https://www.facebook.com/smanutekid" target="_blank">SMA NU Tenajar Kidul</a>
             </div>
         </div>
 
