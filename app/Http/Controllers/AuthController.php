@@ -61,42 +61,34 @@ class AuthController extends Controller
      * Proses registrasi (create user)
      */
     public function register(Request $request)
-    {
-        // validasi input
-        $data = $request->validate([
-            'name' => ['required','string','max:255'],
-            'email' => ['required','string','email','max:255', Rule::unique('users','email')],
-            'password' => ['required','string','min:8','confirmed'],
-        ]);
+{
+    $data = $request->validate([
+        'name' => ['required','string','max:255'],
+        'email' => ['required','string','email','max:255', Rule::unique('users','email')],
+        'password' => ['required','string','min:8','confirmed'],
+    ]);
 
-        // buat user
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            
-        ]);
+    // 👇 SET ROLE DEFAULT
+    $role = 'guru';
 
-        // ✅ Jika role guru, buat data di tabel gurus
-        if ($data['role'] === 'guru') {
-            \App\Models\Guru::create([
-                'user_id' => $user->id,
-                'mapel' => 'Belum Diatur',
-            ]);
-        }
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role' => $role, // pastikan kolom role ada di tabel users
+    ]);
 
-        // otomatis login setelah registrasi (opsional)
-        Auth::login($user);
+    // 👇 karena pasti guru
+    \App\Models\Guru::create([
+        'user_id' => $user->id,
+        'mapel' => 'Belum Diatur',
+    ]);
 
-        // redirect berdasarkan role
-        if ($user->isAdmin()) {
-            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
-        } elseif ($user->isGuru()) {
-            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
-        }
+    Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
-    }
+    return redirect()->route('dashboard')
+        ->with('success', 'Registrasi berhasil!');
+}
 
     /**
      * Logout
