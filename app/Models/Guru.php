@@ -7,14 +7,17 @@ class Guru extends Model
 {
     protected $table = 'gurus';
 
+    protected $primaryKey = 'id'; // Pastikan ada primary key
+    
     protected $fillable = [
         'user_id',
         'mapel',
+        // tambahkan field lain jika ada
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id'); // ✅ Tambahkan foreign key
     }
 
     public function kelas()
@@ -22,9 +25,8 @@ class Guru extends Model
         return $this->belongsToMany(Kelas::class, 'guru_kelas', 'guru_id', 'kelas_id');
     }
 
-    // TAMBAHKAN RELASI INI UNTUK KEHADIRAN
     public function kehadirans()
     {
-        return $this->hasMany(Kehadiran::class);
+        return $this->hasMany(Kehadiran::class, 'guru_id'); // ✅ Tambahkan foreign key
     }
 }

@@ -15,6 +15,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', 
     ];
 
     protected $hidden = [
@@ -26,26 +27,34 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // ✅ TAMBAHKAN RELASI INI
     public function guru()
     {
         return $this->hasOne(Guru::class);
     }
     
-    // ✅ Optional: Helper methods
     public function isAdmin()
-{
-    return $this->role === 'admin';
-}
+    {
+        return $this->role === 'admin';
+    }
 
-public function isGuru()
-{
-    return $this->role === 'guru';
-}
-
+    public function isGuru()
+    {
+        return $this->role === 'guru';
+    }
     
     public function getMapelAttribute()
     {
         return $this->guru ? $this->guru->mapel : null;
+    }
+    public function getRoleNameAttribute()
+    {
+        $roles = [
+            'admin' => 'Administrator',
+            'guru' => 'Guru', 
+            'siswa' => 'Siswa',
+            'user' => 'User'
+        ];
+        
+        return $roles[$this->role] ?? 'User';
     }
 }

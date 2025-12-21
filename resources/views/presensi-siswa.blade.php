@@ -13,6 +13,8 @@
   --brand:#0f3a80;
   --accent:#3f7bff;
   --bg:#f5f6f8;
+  --success:#28a745;
+  --danger:#dc3545;
 }
 
 body{
@@ -71,18 +73,134 @@ body{
   margin-bottom:20px;
 }
 
-.camera-box{
-  width:100%;
-  height:280px;
-  border:2px dashed #c7c7c7;
-  border-radius:12px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:18px;
-  color:#7b8794;
+/* ================= KAMERA SECTION ================= */
+.camera-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
+.camera-status {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status-disconnected {
+  background: #f8d7da;
+  color: var(--danger);
+}
+
+.status-connected {
+  background: #d4edda;
+  color: var(--success);
+}
+
+.camera-container {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #1a1a1a;
+}
+
+.camera-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 18px;
+}
+
+.camera-icon {
+  font-size: 60px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.camera-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.camera-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-connect {
+  background: linear-gradient(90deg, var(--accent), #2f63d6);
+  color: white;
+}
+
+.btn-connect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 123, 255, 0.3);
+}
+
+.btn-disconnect {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-disconnect:hover {
+  background: #c82333;
+}
+
+.btn-capture {
+  background: var(--success);
+  color: white;
+}
+
+.btn-capture:hover {
+  background: #218838;
+}
+
+.connection-info {
+  margin-top: 15px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.connection-info h6 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.connection-info ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* ================= KELAS SECTION ================= */
 .kelas-item{
   background:#f8f9fb;
   border:1px solid #eee;
@@ -159,6 +277,20 @@ footer{
     opacity:1;
     pointer-events:auto;
   }
+  
+  .camera-container {
+    height: 250px;
+  }
+  
+  .camera-controls {
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .camera-btn {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
 }
 </style>
 </head>
@@ -211,12 +343,55 @@ footer{
 
   <!-- ===== CONTENT ===== -->
   <main>
-
     <div class="panel">
-      <div class="fw-bold mb-2">Presensi Otomatis</div>
-      <div class="camera-box">📷 Kamera belum terhubung</div>
+  <div class="camera-header">
+    <div class="fw-bold">Presensi Otomatis - ESP32-CAM</div>
+    <div id="statusIndicator" class="camera-status status-disconnected">
+      🔴 ESP32-CAM Terputus
     </div>
-
+  </div>
+  
+  <div class="camera-container" id="cameraContainer">
+    <div class="camera-placeholder" id="cameraPlaceholder">
+      <div class="camera-icon">🤖</div>
+      <div>ESP32-CAM Offline</div>
+      <small class="mt-2">IP: <span id="espIp">192.168.1.100</span></small>
+    </div>
+    
+    <img id="esp32Stream" class="camera-preview" style="display:none;">
+    
+    <div class="camera-controls" id="cameraControls" style="display:none;">
+      <button class="camera-btn btn-capture" onclick="captureFromESP32()">
+        <span>📸</span> Ambil Foto & Presensi
+      </button>
+      <button class="camera-btn btn-disconnect" onclick="disconnectESP32()">
+        <span>❌</span> Putuskan
+      </button>
+    </div>
+  </div>
+  
+  <div class="connection-info mt-3">
+    <h6>🔌 Koneksi ESP32-CAM:</h6>
+    <div class="input-group mb-2">
+      <span class="input-group-text">IP Address</span>
+      <input type="text" id="esp32Ip" class="form-control" 
+             value="192.168.1.100" placeholder="IP ESP32-CAM">
+      <button class="btn btn-outline-primary" onclick="testConnection()">
+        Test
+      </button>
+    </div>
+    <small class="text-muted">
+      Pastikan ESP32-CAM dan komputer dalam jaringan WiFi yang sama
+    </small>
+  </div>
+  
+  <div class="text-center mt-3">
+    <button class="camera-btn btn-connect" onclick="connectToESP32()" id="connectBtn">
+      <span>🔗</span> Hubungkan ke ESP32-CAM
+    </button>
+  </div>
+</div>
+    <!-- KELAS SECTION (TIDAK DIUBAH) -->
     <div class="panel">
       <div class="fw-bold mb-2">Kelas Yang Anda Ampu</div>
       <div class="text-muted mb-3">{{ now()->translatedFormat('l, d F Y') }}</div>
@@ -252,9 +427,255 @@ footer{
 </footer>
 
 <script>
+// Toggle Sidebar
 function toggleSidebar(){
   document.body.classList.toggle('sidebar-open');
 }
+
+let esp32Ip = "192.168.1.100";
+let streamInterval = null;
+
+function connectToESP32() {
+  const placeholder = document.getElementById('cameraPlaceholder');
+  const streamImg = document.getElementById('esp32Stream');
+  const controls = document.getElementById('cameraControls');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const connectBtn = document.getElementById('connectBtn');
+  
+  // Ambil IP dari input
+  esp32Ip = document.getElementById('esp32Ip').value.trim();
+  if (!esp32Ip) {
+    alert('Masukkan IP Address ESP32-CAM!');
+    return;
+  }
+  
+  // Tampilkan loading
+  placeholder.innerHTML = '<div class="camera-icon">⏳</div><div>Menghubungkan ke ESP32...</div>';
+  connectBtn.disabled = true;
+  connectBtn.innerHTML = '<span>⏳</span> Menghubungkan...';
+  
+  // Test connection first
+  fetch(`http://${esp32Ip}/capture`, { mode: 'no-cors' })
+    .then(() => {
+      // Jika berhasil, mulai stream
+      startStreaming();
+      
+      placeholder.style.display = 'none';
+      streamImg.style.display = 'block';
+      controls.style.display = 'flex';
+      
+      statusIndicator.className = 'camera-status status-connected';
+      statusIndicator.innerHTML = '🟢 ESP32-CAM Terhubung';
+      
+      connectBtn.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Connection failed:', error);
+      placeholder.innerHTML = `
+        <div class="camera-icon">❌</div>
+        <div>Gagal terhubung ke ESP32</div>
+        <small class="mt-2">IP: ${esp32Ip}</small>
+        <small>Pastikan ESP32 aktif dan jaringan sama</small>
+      `;
+      
+      statusIndicator.className = 'camera-status status-disconnected';
+      statusIndicator.innerHTML = '🔴 Gagal Terhubung';
+      
+      connectBtn.disabled = false;
+      connectBtn.innerHTML = '<span>🔄</span> Coba Lagi';
+    });
+}
+
+function startStreaming() {
+  const streamImg = document.getElementById('esp32Stream');
+  const streamUrl = `http://${esp32Ip}/stream`;
+  
+  // MJPEG Stream
+  streamImg.src = streamUrl;
+  
+  // Atau alternatif: polling gambar setiap 100ms
+  if (streamInterval) clearInterval(streamInterval);
+  
+  streamInterval = setInterval(() => {
+    const timestamp = new Date().getTime();
+    streamImg.src = `http://${esp32Ip}/capture?t=${timestamp}`;
+  }, 100); // 10 FPS
+}
+
+function disconnectESP32() {
+  const placeholder = document.getElementById('cameraPlaceholder');
+  const streamImg = document.getElementById('esp32Stream');
+  const controls = document.getElementById('cameraControls');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const connectBtn = document.getElementById('connectBtn');
+  
+  // Stop stream
+  if (streamInterval) {
+    clearInterval(streamInterval);
+    streamInterval = null;
+  }
+  streamImg.src = '';
+  
+  // Reset UI
+  streamImg.style.display = 'none';
+  controls.style.display = 'none';
+  placeholder.style.display = 'flex';
+  placeholder.innerHTML = `
+    <div class="camera-icon">🤖</div>
+    <div>ESP32-CAM Terputus</div>
+    <small class="mt-2">IP: ${esp32Ip}</small>
+  `;
+  
+  // Update status
+  statusIndicator.className = 'camera-status status-disconnected';
+  statusIndicator.innerHTML = '🔴 ESP32-CAM Terputus';
+  
+  connectBtn.style.display = 'block';
+  connectBtn.disabled = false;
+  connectBtn.innerHTML = '<span>🔗</span> Hubungkan ke ESP32-CAM';
+}
+
+async function captureFromESP32() {
+  const statusIndicator = document.getElementById('statusIndicator');
+  
+  try {
+    statusIndicator.innerHTML = '⏳ Mengambil foto...';
+    
+    // Ambil foto dari ESP32
+    const response = await fetch(`http://${esp32Ip}/capture`);
+    const blob = await response.blob();
+    
+    // Kirim ke server Laravel untuk face recognition
+    const formData = new FormData();
+    formData.append('image', blob, 'face_esp32.jpg');
+    formData.append('_token', '{{ csrf_token() }}');
+    formData.append('device', 'esp32-cam');
+    
+    statusIndicator.innerHTML = '⏳ Memproses wajah...';
+    
+    // Kirim ke endpoint Laravel
+    const laravelResponse = await fetch('/api/face-recognition', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await laravelResponse.json();
+    
+    if (result.success) {
+      statusIndicator.innerHTML = '✅ Presensi berhasil!';
+      alert(`Presensi berhasil untuk: ${result.student_name}`);
+      
+      // Tampilkan info siswa
+      showAttendanceSuccess(result);
+    } else {
+      statusIndicator.innerHTML = '❌ Wajah tidak dikenali';
+      alert('Wajah tidak dikenali. Silakan coba lagi atau gunakan presensi manual.');
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+    statusIndicator.innerHTML = '❌ Error capture';
+    alert('Gagal mengambil foto dari ESP32. Pastikan koneksi stabil.');
+  }
+  
+  // Kembalikan status setelah 3 detik
+  setTimeout(() => {
+    statusIndicator.innerHTML = '🟢 ESP32-CAM Terhubung';
+  }, 3000);
+}
+
+function testConnection() {
+  const ip = document.getElementById('esp32Ip').value.trim();
+  if (!ip) return;
+  
+  const statusIndicator = document.getElementById('statusIndicator');
+  statusIndicator.innerHTML = '⏳ Testing connection...';
+  
+  // Coba akses endpoint capture
+  fetch(`http://${ip}/capture`, { 
+    mode: 'no-cors',
+    cache: 'no-cache'
+  })
+  .then(() => {
+    statusIndicator.innerHTML = '✅ ESP32 ditemukan!';
+    setTimeout(() => {
+      statusIndicator.innerHTML = '🔴 ESP32-CAM Terputus';
+    }, 2000);
+  })
+  .catch(() => {
+    statusIndicator.innerHTML = '❌ ESP32 tidak ditemukan';
+    setTimeout(() => {
+      statusIndicator.innerHTML = '🔴 ESP32-CAM Terputus';
+    }, 2000);
+  });
+}
+
+function showAttendanceSuccess(data) {
+  // Tampilkan modal atau notifikasi
+  const modalHtml = `
+    <div class="attendance-success">
+      <h5>✅ Presensi Berhasil!</h5>
+      <p><strong>Siswa:</strong> ${data.student_name}</p>
+      <p><strong>NIS:</strong> ${data.student_nis}</p>
+      <p><strong>Kelas:</strong> ${data.class_name}</p>
+      <p><strong>Waktu:</strong> ${new Date().toLocaleTimeString()}</p>
+      <button onclick="this.parentElement.remove()" class="btn btn-sm btn-primary">
+        Tutup
+      </button>
+    </div>
+  `;
+  
+  // Tambahkan ke DOM
+  const div = document.createElement('div');
+  div.innerHTML = modalHtml;
+  div.style.position = 'fixed';
+  div.style.top = '20px';
+  div.style.right = '20px';
+  div.style.zIndex = '9999';
+  div.style.padding = '15px';
+  div.style.background = 'white';
+  div.style.borderRadius = '10px';
+  div.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+  document.body.appendChild(div);
+  
+  // Auto remove setelah 5 detik
+  setTimeout(() => {
+    if (div.parentElement) {
+      div.remove();
+    }
+  }, 5000);
+}
+
+// Auto-detect ESP32 di jaringan (optional)
+async function scanNetwork() {
+  // Ini hanya contoh sederhana
+  const baseIp = '192.168.1.';
+  
+  for (let i = 1; i <= 254; i++) {
+    const ip = baseIp + i;
+    
+    // Skip current device
+    if (ip === window.location.hostname) continue;
+    
+    try {
+      await fetch(`http://${ip}/capture`, { 
+        mode: 'no-cors',
+        timeout: 100 
+      });
+      
+      // Jika berhasil, mungkin ini ESP32
+      console.log('Found potential ESP32 at:', ip);
+      document.getElementById('esp32Ip').value = ip;
+      break;
+    } catch (e) {
+      // Continue scanning
+    }
+  }
+}
+
+// Jalankan scan saat halaman load (opsional)
+// document.addEventListener('DOMContentLoaded', scanNetwork);
+</script>
 </script>
 
 </body>

@@ -10,16 +10,19 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\LandingController;
 
-<<<<<<< Updated upstream
-// Landing Page
+Route::get('/fix-cache', function () {
+   Artisan::call('optimize:clear');
+   Artisan::call('config:clear');
+   Artisan::call('cache:clear');
+   Artisan::call('view:clear');
+   Artisan::call('route:clear');
+   return "<pre>" . Artisan::output() . "Semua cache berhasil dibersihkan.</pre>";
+});
 Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
-=======
-Route::get('/landingpage', [LandingController::class, 'index']);
->>>>>>> Stashed changes
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login'])->name('login.post');
@@ -54,4 +57,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
-
+Route::get('/test-py', function() {
+    $output = [];
+    $returnCode = 0;
+    
+    exec('py --version 2>&1', $output, $returnCode);
+    
+    return response()->json([
+        'command' => 'py --version',
+        'success' => $returnCode === 0,
+        'output' => implode("\n", $output),
+        'return_code' => $returnCode
+    ]);
+});

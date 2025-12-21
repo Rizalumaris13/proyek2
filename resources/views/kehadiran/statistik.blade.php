@@ -231,27 +231,6 @@ footer{
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-6 text-end">
-                        <div class="d-flex justify-content-end gap-3">
-                            {{-- LEGEND KOTAK --}}
-                            <div class="legend-item">
-                                <div class="legend-box hadir"></div>
-                                <span>Hadir</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-box izin"></div>
-                                <span>Izin</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-box sakit"></div>
-                                <span>Sakit</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-box alfa"></div>
-                                <span>Alfa</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

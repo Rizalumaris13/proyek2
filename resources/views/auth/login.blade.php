@@ -151,7 +151,7 @@
 
         <h3 style="font-weight:900;text-align:center;margin-bottom:18px">LOGIN</h3>
 
-        <form method="POST" action="">
+        <form method="POST" action="{{ route('login') }}">
           @csrf
 
           <div class="mb-3">
