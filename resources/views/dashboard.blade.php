@@ -178,9 +178,6 @@
         Halo, {{ Auth::user()->name ?? 'Admin' }}
       </div>
 
-      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
-        Logout
-      </a>
     </div>
   </div>
 </header>

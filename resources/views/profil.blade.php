@@ -221,7 +221,7 @@ body{
       <div class="logout-box">
         <form method="POST" action="{{ route('logout') }}">
           @csrf
-          <button class="btn btn-danger w-100">Keluar dari Akun</button>
+          <button class="btn btn-danger w-100">Logout</button>
         </form>
       </div>
     </div>

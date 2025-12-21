@@ -179,10 +179,6 @@ footer{
       <div style="font-weight:600">
         Halo, {{ Auth::user()->name ?? 'Admin' }}
       </div>
-
-      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
-        Logout
-      </a>
     </div>
     <!-- HAMBURGER (MOBILE ONLY) -->
     <button class="btn btn-link text-white d-md-none"
