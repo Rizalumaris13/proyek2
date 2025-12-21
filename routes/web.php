@@ -9,6 +9,7 @@ use App\Http\Controllers\KehadiranStatistikController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\PresensiOtomatisController;
 
 // Landing Page
 Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
@@ -54,4 +55,5 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
+Route::post('/iot/presensi', [PresensiOtomatisController::class, 'receive']);
 
