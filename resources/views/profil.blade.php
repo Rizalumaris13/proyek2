@@ -155,7 +155,7 @@ body{
 <!-- ================= HEADER ================= -->
 <header class="topbar">
   <div class="d-flex align-items-center gap-3">
-    <img src="{{ asset('images/logo.png') }}" style="height:36px">
+    <img src="{{ asset('images/lo.png') }}" style="height:36px">
     <div>
       <h6 class="m-0 fw-bold">Sistem Presensi Cerdas</h6>
       <small>SMA NU Tenajar Kidul</small>

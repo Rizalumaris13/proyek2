@@ -101,7 +101,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <div class="brand">
         {{-- letakkan logo di public/images/logo.png atau ubah path --}}
-        <img src="{{ asset('images/logo.png') }}" alt="logo">
+        <img src="{{ asset('images/lo.png') }}" alt="logo">
         <div>
           <div style="font-weight:800">SMA NU</div>
           <div style="font-size:12px;color:#6b7a99">Tenajar Kidul</div>

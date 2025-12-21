@@ -118,7 +118,7 @@
 
 <header>
   <div class="brand">
-    <a href="{{ route('home') }}"><img src="{{ asset('images/logo.png') }}" alt="logo"></a>
+    <a href="{{ route('home') }}"><img src="{{ asset('images/lo.png') }}" alt="logo"></a>
     <div>
       <div style="font-weight:900;color:var(--brand)">SMA NU Tenajar Kidul</div>
       <div style="font-size:12px;color:var(--muted)">Terampil · Aktual · Ulet</div>
