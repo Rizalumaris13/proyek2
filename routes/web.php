@@ -9,6 +9,7 @@ use App\Http\Controllers\KehadiranStatistikController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\PresensiOtomatisController;
 
 Route::get('/fix-cache', function () {
    Artisan::call('optimize:clear');
@@ -49,10 +50,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('kehadiran.store');
 
     // Statistik Kehadiran
-    Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index'])
-        ->name('kehadiran.statistik');
+    Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index']);
 });
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');

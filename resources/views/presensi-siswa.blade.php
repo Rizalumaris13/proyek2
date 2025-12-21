@@ -300,7 +300,7 @@ footer{
 <!-- ================= HEADER ================= -->
 <header class="topbar">
   <div class="d-flex align-items-center gap-3">
-    <img src="{{ asset('images/logo.png') }}" style="height:34px">
+    <img src="{{ asset('images/lo.png') }}" style="height:34px">
     <div>
       <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
       <small>SMA NU Tenajar Kidul</small>
@@ -311,10 +311,6 @@ footer{
       <div style="font-weight:600">
         Halo, {{ Auth::user()->name ?? 'Admin' }}
       </div>
-
-      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
-        Logout
-      </a>
     </div>
     <!-- HAMBURGER (MOBILE ONLY) -->
     <button class="btn btn-link text-white d-md-none"

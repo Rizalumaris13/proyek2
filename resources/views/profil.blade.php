@@ -155,7 +155,7 @@ body{
 <!-- ================= HEADER ================= -->
 <header class="topbar">
   <div class="d-flex align-items-center gap-3">
-    <img src="{{ asset('images/logo.png') }}" style="height:36px">
+    <img src="{{ asset('images/lo.png') }}" style="height:36px">
     <div>
       <h6 class="m-0 fw-bold">Sistem Presensi Cerdas</h6>
       <small>SMA NU Tenajar Kidul</small>
@@ -221,7 +221,7 @@ body{
       <div class="logout-box">
         <form method="POST" action="{{ route('logout') }}">
           @csrf
-          <button class="btn btn-danger w-100">Keluar dari Akun</button>
+          <button class="btn btn-danger w-100">Logout</button>
         </form>
       </div>
     </div>

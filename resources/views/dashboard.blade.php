@@ -153,7 +153,7 @@
   <header class="topbar">
   <!-- KIRI: BRAND (JANGAN DIUBAH POSISINYA) -->
   <div class="brand">
-    <img src="{{ asset('images/logo.png') }}" alt="logo">
+    <img src="{{ asset('images/lo.png') }}" alt="logo">
     <div>
       <h5>Sistem Presensi Cerdas</h5>
       <div style="font-size:12px;color:rgba(255,255,255,0.85)">
@@ -178,9 +178,6 @@
         Halo, {{ Auth::user()->name ?? 'Admin' }}
       </div>
 
-      <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">
-        Logout
-      </a>
     </div>
   </div>
 </header>

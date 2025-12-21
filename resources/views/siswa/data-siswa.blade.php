@@ -120,7 +120,7 @@
 <body>
     <header class="topbar">
         <div class="d-flex align-items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" style="height:34px;">
+            <img src="{{ asset('images/lo.png') }}" alt="logo" style="height:34px;">
             <div>
                 <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
                 <small>SMA NU Tenajar Kidul</small>
@@ -130,8 +130,6 @@
             <div style="color:rgba(255,255,255,0.9);font-weight:600">
                 Halo, {{ Auth::user()->name ?? 'Admin' }}
             </div>
-            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">Logout</a>
-            <form id="logout-form" action="{{Route ('logout')}}" method="POST" style="display:none">@csrf</form>
         </div>
     </header>
 

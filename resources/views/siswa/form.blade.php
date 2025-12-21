@@ -89,7 +89,7 @@
     {{-- Header --}}
     <header class="topbar">
         <div class="d-flex align-items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" style="height:34px;">
+            <img src="{{ asset('images/lo.png') }}" alt="logo" style="height:34px;">
             <div>
                 <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
                 <small>SMA NU Tenajar Kidul</small>
