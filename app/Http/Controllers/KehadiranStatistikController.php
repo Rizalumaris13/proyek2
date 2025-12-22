@@ -7,6 +7,8 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Kehadiran;
 use App\Models\Guru;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class KehadiranStatistikController extends Controller
 {
@@ -125,4 +127,95 @@ class KehadiranStatistikController extends Controller
         'rekap','siswa','total','persentase','tahunIni'
     ));
 }
+private function getRekapKehadiran(Request $request)
+{
+    $user = auth()->user();
+    $tahunIni = now()->year;
+
+    // ADMIN
+    if ($user->role === 'admin') {
+
+        $kelasGuru = \App\Models\Kelas::orderBy('nama_kelas')->get();
+        $kelasDipilih = $kelasGuru->firstWhere('id', $request->kelas_id)
+                        ?? $kelasGuru->first();
+
+        $siswa = \App\Models\Siswa::where('kelas_id', $kelasDipilih->id)->get();
+
+        $rekap = \App\Models\Kehadiran::selectRaw("
+            MONTH(tanggal) as bulan,
+            SUM(status = 'hadir') as hadir,
+            SUM(status = 'izin') as izin,
+            SUM(status = 'sakit') as sakit,
+            SUM(status = 'alfa') as alfa
+        ")
+        ->whereIn('siswa_id', $siswa->pluck('id'))
+        ->whereYear('tanggal', $tahunIni)
+        ->groupBy('bulan')
+        ->get()
+        ->keyBy('bulan');
+
+    } 
+    // GURU
+    else {
+
+        $guru = \App\Models\Guru::where('user_id', $user->id)->firstOrFail();
+
+        $kelasGuru = $guru->kelas()->orderBy('nama_kelas')->get();
+        $kelasDipilih = $kelasGuru->firstWhere('id', $request->kelas_id)
+                        ?? $kelasGuru->first();
+
+        $siswa = \App\Models\Siswa::where('kelas_id', $kelasDipilih->id)->get();
+
+        $rekap = \App\Models\Kehadiran::selectRaw("
+            MONTH(tanggal) as bulan,
+            SUM(status = 'hadir') as hadir,
+            SUM(status = 'izin') as izin,
+            SUM(status = 'sakit') as sakit,
+            SUM(status = 'alfa') as alfa
+        ")
+        ->whereIn('siswa_id', $siswa->pluck('id'))
+        ->whereYear('tanggal', $tahunIni)
+        ->where('guru_id', $guru->id)
+        ->groupBy('bulan')
+        ->get()
+        ->keyBy('bulan');
+    }
+
+    $total = [
+        'hadir' => $rekap->sum('hadir'),
+        'izin'  => $rekap->sum('izin'),
+        'sakit' => $rekap->sum('sakit'),
+        'alfa'  => $rekap->sum('alfa'),
+    ];
+
+    return compact(
+        'kelasGuru',
+        'kelasDipilih',
+        'rekap',
+        'siswa',
+        'total',
+        'tahunIni'
+    );
+}
+
+public function exportPdf()
+{
+    $rekap = DB::table('kehadirans')
+    ->join('siswa', 'kehadirans.siswa_id', '=', 'siswa.id')
+    ->join('kelas', 'siswa.kelas_id', '=', 'kelas.id')
+    ->select(
+        'siswa.nama',
+        'kelas.nama_kelas',
+        DB::raw("SUM(status = 'hadir') as hadir"),
+        DB::raw("SUM(status = 'izin') as izin"),
+        DB::raw("SUM(status = 'sakit') as sakit"),
+        DB::raw("SUM(status = 'alfa') as alfa")
+    )
+    ->groupBy('siswa.id', 'siswa.nama', 'kelas.nama_kelas')
+    ->get();
+
+$pdf = Pdf::loadView('kehadiran.statistik-pdf', compact('rekap'));
+return $pdf->download('rekap-absensi-siswa.pdf');
+}
+
 }

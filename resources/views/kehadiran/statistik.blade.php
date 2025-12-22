@@ -348,6 +348,12 @@ footer{
                     </table>
                 </div>
             </div>
+            <div class="text-end mt-3">
+  <a href="{{ route('kehadiran.statistik.pdf', ['kelas_id' => $kelasId]) }}"
+     class="btn btn-danger">
+     <i class="fas fa-file-pdf"></i> Download Laporan PDF
+  </a>
+</div>
 
         </main>
 

@@ -51,21 +51,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Statistik Kehadiran
     Route::get('/kehadiran/statistik', [KehadiranStatistikController::class, 'index']);
+    Route::get('/kehadiran/statistik/pdf', [KehadiranStatistikController::class, 'exportPdf'])
+        ->name('kehadiran.statistik.pdf');
+
 });
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/create', [GuruController::class, 'create'])->name('guru.create');
 Route::post('/guru/store', [GuruController::class, 'store'])->name('guru.store');
-Route::get('/test-py', function() {
-    $output = [];
-    $returnCode = 0;
-    
-    exec('py --version 2>&1', $output, $returnCode);
-    
-    return response()->json([
-        'command' => 'py --version',
-        'success' => $returnCode === 0,
-        'output' => implode("\n", $output),
-        'return_code' => $returnCode
-    ]);
-});
