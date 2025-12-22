@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kehadiran;
-use App\Models\Siswa;
 use Carbon\Carbon;
 
 class PresensiOtomatisController extends Controller
@@ -13,20 +12,31 @@ class PresensiOtomatisController extends Controller
     {
         $request->validate([
             'siswa_id' => 'required|exists:siswa,id',
+            'status'   => 'required'
         ]);
 
-        Kehadiran::updateOrCreate(
-            [
-                'siswa_id' => $request->siswa_id,
-                'tanggal' => Carbon::today(),
-            ],
-            [
-                'status' => 'hadir',
-            ]
-        );
+        $tanggal = Carbon::today();
+
+        // anti double absen
+        $sudah = Kehadiran::where('siswa_id', $request->siswa_id)
+            ->where('tanggal', $tanggal)
+            ->exists();
+
+        if ($sudah) {
+            return response()->json([
+                'message' => 'Sudah absen'
+            ]);
+        }
+
+        Kehadiran::create([
+            'siswa_id' => $request->siswa_id,
+            'guru_id'  => null, // AMAN
+            'tanggal'  => $tanggal,
+            'status'   => $request->status
+        ]);
 
         return response()->json([
-            'message' => 'Presensi berhasil',
+            'message' => 'Presensi otomatis berhasil'
         ]);
     }
 }
