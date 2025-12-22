@@ -105,7 +105,13 @@ body{
   color:#fff;
   border-color:var(--accent);
 }
-
+footer {
+            background: var(--brand);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+        }
 /* ================= OVERLAY ================= */
 .sidebar-overlay{display:none}
 
@@ -159,7 +165,7 @@ body{
 <!-- ================= HEADER ================= -->
 <header class="topbar">
   <div class="d-flex align-items-center gap-3">
-    <img src="{{ asset('images/logo.png') }}" style="height:34px">
+    <img src="{{ asset('images/lo.png') }}" style="height:34px">
     <div>
       <h5 class="m-0 fw-bold">Sistem Presensi Cerdas</h5>
       <small>SMA NU Tenajar Kidul</small>
@@ -231,7 +237,7 @@ body{
                        id="{{ $v.$s->id }}"
                        name="kehadiran[{{ $s->id }}]"
                        value="{{ $v }}"
-                       {{ ($kehadiranHariIni[$s->id]->status ?? 'hadir') == $v ? 'checked' : '' }}>
+                       {{ (isset($kehadiranHariIni[$s->id]) && $kehadiranHariIni[$s->id]->status == $v) ? 'checked' : '' }}>
                 <label for="{{ $v.$s->id }}">{{ $l }}</label>
               </div>
               @endforeach
@@ -253,7 +259,9 @@ body{
 </div>
 
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
+<footer>
+    © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
+  </footer>
 <script>
 function toggleSidebar(){
   document.body.classList.toggle('sidebar-open');

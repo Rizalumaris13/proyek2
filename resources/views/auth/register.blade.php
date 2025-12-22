@@ -109,10 +109,10 @@
       </div>
 
       <nav class="d-none d-md-flex">
-        <a href="#home" class="nav-link">Beranda</a>
-        <a href="#profile" class="nav-link">Profil Sekolah</a>
-        <a href="#gallery" class="nav-link">Galeri</a>
-        <a href="#contact" class="nav-link">Kontak</a>
+        <a href="{{route('home')}}#home" class="nav-link">Beranda</a>
+    <a href="{{route('home')}}#profile" class="nav-link">Profile Sekolah</a>
+    <a href="{{route('home')}}#gallery" class="nav-link">Galeri</a>
+    <a href="{{route('home')}}#contact" class="nav-link">Kontak</a>
       </nav>
     </div>
   </header>

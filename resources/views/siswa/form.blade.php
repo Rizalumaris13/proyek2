@@ -97,8 +97,6 @@
         </div>
         <div class="d-flex align-items-center gap-3">
             <div style="color:rgba(255,255,255,0.9);font-weight:600">Halo, {{ Auth::user()->name ?? 'Admin' }}</div>
-            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="text-white">Logout</a>
-            <form id="logout-form" action="{{ Route('logout') }}" method="POST" style="display:none">@csrf</form>
         </div>
     </header>
 

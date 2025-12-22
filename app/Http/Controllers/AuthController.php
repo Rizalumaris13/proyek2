@@ -68,27 +68,33 @@ class AuthController extends Controller
         'password' => ['required','string','min:8','confirmed'],
     ]);
 
-    // 👇 SET ROLE DEFAULT
-    $role = 'guru';
-
+    // 1️⃣ Buat user
     $user = User::create([
         'name' => $data['name'],
         'email' => $data['email'],
         'password' => Hash::make($data['password']),
-        'role' => $role, // pastikan kolom role ada di tabel users
+        'role' => 'guru',
     ]);
 
-    // 👇 karena pasti guru
-    \App\Models\Guru::create([
+    // 2️⃣ Buat guru
+    $guru = \App\Models\Guru::create([
         'user_id' => $user->id,
         'mapel' => 'Belum Diatur',
     ]);
+
+    // 3️⃣ Assign kelas DEFAULT
+    // setelah guru dibuat
+$kelasDefault = [1, 3, 4];
+
+$guru->kelas()->attach($kelasDefault);
+
 
     Auth::login($user);
 
     return redirect()->route('dashboard')
         ->with('success', 'Registrasi berhasil!');
 }
+
 
     /**
      * Logout

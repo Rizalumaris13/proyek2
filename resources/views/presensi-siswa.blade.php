@@ -419,8 +419,8 @@ footer{
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <footer>
-© {{ date('Y') }} SMA NU Tenajar Kidul
-</footer>
+    © {{ date('Y') }} SMA NU Tenajar Kidul. All rights reserved.
+  </footer>
 
 <script>
 // Toggle Sidebar

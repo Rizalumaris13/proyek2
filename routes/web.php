@@ -22,7 +22,7 @@ Route::get('/fix-cache', function () {
 Route::get('/landingpage', [LandingController::class, 'index'])->name('home');
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('home');
 });
 
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
