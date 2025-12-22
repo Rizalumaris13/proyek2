@@ -171,10 +171,6 @@ body{
     <!-- Desktop -->
     <div class="d-none d-md-flex align-items-center gap-3">
       <span class="fw-semibold">Halo, {{ Auth::user()->name }}</span>
-      <a href="#" class="text-white"
-         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-        Logout
-      </a>
     </div>
   </div>
 </header>
