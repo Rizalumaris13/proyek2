@@ -20,7 +20,7 @@
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{height:54px}
     nav{display:flex;gap:18px;align-items:center}
-    nav a{font-weight:700;opacity:0.95; margin-left: 30px;}
+    nav a{font-weight:700;opacity:0.95; margin-left: 30px; text-decoration: none;}
     .hero{
       min-height:360px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;
       background-size:cover;background-position:center;

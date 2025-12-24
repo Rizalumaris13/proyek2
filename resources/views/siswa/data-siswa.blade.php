@@ -1,130 +1,130 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Data Siswa — Sistem Presensi Cerdas</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Data Siswa — Sistem Presensi Cerdas</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#0f3a80;
+  --accent:#3f7bff;
+  --panel:#fff;
+  --bg:#f5f6f8;
+}
 
-  <style>
-    :root{
-      --brand:#0f3a80;
-      --accent:#3f7bff;
-      --muted:#7b8794;
-      --panel:#ffffff;
-      --bg:#f5f6f8;
-    }
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:var(--bg);
+}
 
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      background:var(--bg);
-      color:#122233;
-    }
+/* ===== TOPBAR ===== */
+.topbar{
+  background:var(--brand);
+  color:#fff;
+  padding:14px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{display:flex;gap:12px;align-items:center}
+.brand img{height:34px}
 
-    /* ===== TOPBAR ===== */
-    .topbar{
-      background:var(--brand);
-      color:#fff;
-      padding:14px 22px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:34px}
-    .brand h5{margin:0;font-weight:700}
+/* ===== LAYOUT ===== */
+.app{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:28px;
+  padding:28px;
+  align-items:start;
+}
 
-    /* ===== LAYOUT ===== */
-    .app{
-      display:grid;
-      grid-template-columns:260px 1fr;
-      gap:28px;
-      padding:28px;
-      align-items:start;
-    }
+/* ===== SIDEBAR ===== */
+.sidebar{
+  z-index:1050;
+}
+.sidebar-card{
+  background:var(--panel);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(15,58,128,.06);
+}
+.nav-link{
+  font-weight:600;
+  color:#2d3b4a;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:6px;
+}
+.nav-link.active{
+  background:linear-gradient(90deg,var(--accent),#2f63d6);
+  color:#fff;
+}
 
-    /* ===== SIDEBAR ===== */
-    .sidebar-card{
-      background:var(--panel);
-      border-radius:14px;
-      padding:18px;
-      box-shadow:0 6px 18px rgba(15,58,128,.06);
-    }
-    .nav-link{
-      color:#2d3b4a;
-      font-weight:600;
-      padding:10px;
-      border-radius:8px;
-      margin-bottom:6px;
-    }
-    .nav-link.active{
-      background:linear-gradient(90deg,var(--accent),#2f63d6);
-      color:#fff;
-    }
+/* ===== CONTENT ===== */
+.content{min-height:70vh}
+.panel{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(2,6,23,.06);
+}
 
-    /* ===== CONTENT ===== */
-    .content{
-      min-height:70vh;
-    }
-    .panel{
-      background:var(--panel);
-      padding:22px;
-      border-radius:14px;
-      box-shadow:0 6px 18px rgba(2,6,23,.06);
-    }
+/* ===== OVERLAY ===== */
+.sidebar-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:1040;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width:768px){
-      .app{
-        grid-template-columns:1fr;
-        padding:16px;
-      }
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .app{
+    grid-template-columns:1fr;
+    padding:16px;
+  }
 
-      .sidebar{
-        position:fixed;
-        top:0;
-        left:-280px;
-        width:260px;
-        height:100vh;
-        z-index:1050;
-        transition:.3s;
-      }
+  .sidebar{
+    position:fixed;
+    top:0;
+    left:-280px;
+    width:260px;
+    height:100vh;
+    transition:.3s;
+  }
 
-      body.sidebar-open .sidebar{
-        left:0;
-      }
+  body.sidebar-open .sidebar{
+    left:0;
+  }
 
-      .sidebar-overlay{
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,.45);
-        z-index:1040;
-        opacity:0;
-        pointer-events:none;
-        transition:.3s;
-      }
+  body.sidebar-open .sidebar-overlay{
+    opacity:1;
+    pointer-events:auto;
+  }
 
-      body.sidebar-open .sidebar-overlay{
-        opacity:1;
-        pointer-events:auto;
-      }
-    }
+  .sidebar-card{
+    height:100%;
+    border-radius:0;
+  }
+}
 
-    footer{
-      background:var(--brand);
-      color:#fff;
-      text-align:center;
-      padding:10px;
-      font-size:13px;
-    }
-  </style>
+footer{
+  background:var(--brand);
+  color:#fff;
+  text-align:center;
+  padding:10px;
+  font-size:13px;
+}
+</style>
 </head>
 
 <body>
@@ -134,7 +134,7 @@
   <div class="brand">
     <img src="{{ asset('images/lo.png') }}">
     <div>
-      <h5>Sistem Presensi Cerdas</h5>
+      <strong>Sistem Presensi Cerdas</strong><br>
       <small>SMA NU Tenajar Kidul</small>
     </div>
   </div>
@@ -151,7 +151,6 @@
 
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<!-- APP -->
 <div class="app container-fluid">
 
   <!-- SIDEBAR -->
@@ -166,7 +165,6 @@
       </nav>
     </div>
   </aside>
-
   <!-- CONTENT -->
   <main class="content">
     <div class="panel">

@@ -68,11 +68,18 @@ body{
   margin-bottom:6px;
 }
 
-.sidebar a.active,
 .sidebar a:hover{
-  background:#e6f0ff;
+  background:#f1f5ff;
   color:#2f63d6;
 }
+
+/* ACTIVE MENU — TEBAL & SOLID */
+.sidebar a.active{
+  background:linear-gradient(90deg, var(--accent), #2f63d6);
+  color:#fff;
+  font-weight:700;
+}
+
 
 /* ================= CONTENT ================= */
 .main{
